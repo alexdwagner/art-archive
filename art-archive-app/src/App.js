@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import FilePreview from "./FilePreview";
-import "./App.css";
+import "./Itunes.css";
+import { ResizableBox } from "react-resizable";
+import "react-resizable/css/styles.css";
+
 
 const App = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -60,13 +63,20 @@ const handleFileSubmit = async (event) => {
         <h1>Art Archive</h1>
       </header>
       <main className="main">
+        {selectedPreview && (
+          <div className="preview-container">
+            <ResizableBox width={600} height={400} minConstraints={[300, 200]} maxConstraints={[800, 600]}>
+              <FilePreview file={selectedPreview} />
+            </ResizableBox>
+          </div>
+        )}
         <div className="form-and-table">
           <form onSubmit={handleFileSubmit}>
             <input type="file" onChange={handleFileUpload} />
             <button type="submit">Upload</button>
           </form>
           <table>
-  <thead>
+          <thead>
     <tr>
       <th>Name</th>
       <th>Size</th>
@@ -82,19 +92,14 @@ const handleFileSubmit = async (event) => {
       </tr>
     ))}
   </tbody>
-</table>
+          </table>
         </div>
-        {selectedPreview && (
-          <div className="preview-container">
-            <FilePreview file={selectedPreview} />
-          </div>
-        )}
       </main>
       <footer>
         <p>&copy; 2023 Art Archive. All rights reserved.</p>
       </footer>
     </div>
-  );
+  )
 };
 
 export default App;

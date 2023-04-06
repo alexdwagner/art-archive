@@ -11,53 +11,48 @@ const FilePreview = ({ file }) => {
   const isPdf = fileExtension === "pdf";
 
   return (
-    <div>
-      {isImage && (
-        <img src={file.url} alt={file.name} style={{ maxWidth: "100%" }} />
-      )}
-      {isVideo && (
-        <video
-          controls
-          src={file.url}
-          width="100%"
-          height="auto"
-          type={`video/${fileExtension}`}
-        >
-          Your browser does not support the video tag.
-        </video>
-      )}
-      {isAudio && (
-        <audio controls>
-          <source src={file.url} type={audioMimeType} />
-          Your browser does not support the audio element.
-        </audio>
-      )}
-      {isText && (
-        <iframe
-          src={file.url}
-          title={file.name}
-          style={{ width: "100%", height: "400px" }}
-        ></iframe>
-      )}
-      {isPdf && (
-        <embed
-          src={file.url}
-          type="application/pdf"
-          width="100%"
-          height="600px"
-        />
-      )}
-      {!isImage && !isVideo && !isAudio && !isText && !isPdf && (
-        <p>
-          Preview not available.{" "}
-          <a href={file.url} download={file.name}>
-            Download file
-          </a>
-        </p>
-      )}
+    <div className="FilePreview">
+      <div className="FilePreview-wrapper">
+        {isImage && (
+          <img src={file.url} alt={file.name} style={{ maxWidth: "100%" }} />
+        )}
+        {isVideo && (
+          <video
+            controls
+            src={file.url}
+            width="100%"
+            height="auto"
+            type={file.type}
+          >
+            Your browser does not support the video tag.
+          </video>
+        )}
+        {isAudio && (
+          <audio controls>
+            <source src={file.url} type={file.type} />
+            Your browser does not support the audio element.
+          </audio>
+        )}
+        {isText && (
+          <iframe
+            src={file.url}
+            title={file.name}
+            width="100%"
+            height="100%"
+            frameborder="0"
+          ></iframe>
+        )}
+        {!isImage && !isVideo && !isAudio && !isText && (
+          <p>
+            Preview not available.{" "}
+            <a href={file.url} download={file.name}>
+              Download file
+            </a>
+          </p>
+        )}
+      </div>
     </div>
   );
 };
 
 export default FilePreview;
-
