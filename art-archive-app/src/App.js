@@ -50,8 +50,9 @@ const handleFileSubmit = async (event) => {
   }, []);
 
   const handleFileClick = (file) => {
-    setSelectedPreview({ ...file, url: `http://localhost:3001/files/${file.name}` });
-  };
+    console.log("File clicked:", file);
+    setSelectedPreview(file);
+  };  
 
   return (
     <div className="App">
