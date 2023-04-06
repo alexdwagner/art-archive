@@ -12,14 +12,33 @@ const App = () => {
     setSelectedFile(event.target.files[0]);
   };
 
-  const handleFileSubmit = async (event) => {
-    event.preventDefault();
-    const formData = new FormData();
-    formData.append("file", selectedFile);
-    await axios.post("http://localhost:3001/upload", formData);
-    setSelectedFile(null);
-    updateFileList();
-  };
+// Imagine the App component as a store, and this function is a worker that handles file delivery.
+const handleFileSubmit = async (event) => {
+  // Stop the normal delivery process, because we'll handle it ourselves.
+  event.preventDefault();
+
+  // Create a special package to hold the file.
+  const formData = new FormData();
+  // Put the selected file inside the package.
+  formData.append("file", selectedFile);
+
+  try {
+    // Send the package to the storage room (server) and wait for a response.
+    const response = await axios.post("http://localhost:3001/upload", formData);
+    // If everything went well, print the response from the storage room.
+    console.log("File upload response:", response);
+  } catch (error) {
+    // If something went wrong during the delivery, print the error message.
+    console.error("File upload error:", error);
+  }
+
+  // Empty our hands, because we're done with the current file.
+  setSelectedFile(null);
+  // Update the list of files available in the store.
+  updateFileList();
+};
+
+  
 
   const updateFileList = async () => {
     const { data } = await axios.get("http://localhost:3001/files");
@@ -31,7 +50,7 @@ const App = () => {
   }, []);
 
   const handleFileClick = (file) => {
-    setSelectedPreview(file);
+    setSelectedPreview({ ...file, url: `http://localhost:3001/files/${file.name}` });
   };
 
   return (

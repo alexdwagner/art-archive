@@ -57,7 +57,7 @@ app.get("/files", (req, res) => {
         url: `http://localhost:3001/uploads/${file}`,
         size: stats.size,
         type: fileExtension,
-        createdAt: stats.birthtime,
+        createdAt: stats.ctime,
       };
     });
 
