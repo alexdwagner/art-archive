@@ -1,0 +1,43 @@
+.react-resizable {
+  position: relative;
+  box-sizing: border-box;
+  display: inline-block;
+}
+
+.react-resizable-handle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  z-index: 1;
+}
+
+.react-resizable-handle-se {
+  bottom: 0;
+  right: 0;
+  cursor: se-resize;
+  background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22 viewBox%3D%220 0 10 10%22%3E%3Cpath fill%3D%22%23333%22 d%3D%22M9 9H1V1h8v8zm-1-1V2H2v6h6z%22%2F%3E%3C%2Fsvg%3E');
+}
+
+.react-resizable-handle-sw {
+  bottom: 0;
+  left: 0;
+  cursor: sw-resize;
+  background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22 viewBox%3D%220 0 10 10%22%3E%3Cpath fill%3D%22%23333%22 d%3D%22M1 9h8V1H1v8zm1-1v-6h6v6H2z%22%2F%3E%3C%2Fsvg%3E');
+}
+
+.react-resizable-handle-ne {
+  top: 0;
+  right: 0;
+  cursor: ne-resize;
+  background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22 viewBox%3D%220 0 10 10%22%3E%3Cpath fill%3D%22%23333%22 d%3D%22M1 1h8v8H1V1zm1 1v6h6V2H2z%22%2F%3E%3C%2Fsvg%3E');
+}
+
+.react-resizable-handle-nw {
+  top: 0;
+  left: 0;
+  cursor: nw-resize;
+  background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22 viewBox%3D%220 0 10 10%22%3E%3Cpath fill%3D%22%23333%22 d%3D%22M9 1H1v8h8V1zm-1 6H2V2h6v5z%22%2F%3');
+}

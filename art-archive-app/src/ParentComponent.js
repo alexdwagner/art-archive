@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import FilePreview from './FilePreview';
+import FilePreview from './components/FilePreview';
 import axios from 'axios';
 
 function ParentComponent() {

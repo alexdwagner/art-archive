@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import FilePreview from "./FilePreview";
+import FilePreview from "./components/FilePreview";
+import FileTable from "./components/FileTable";
 import "./Itunes.css";
 import { ResizableBox } from "react-resizable";
-import "react-resizable/css/styles.css";
+import "./styles.css";
 
 const App = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -45,6 +46,15 @@ const App = () => {
     setSelectedPreview(file);
   };
 
+  const handleSort = (property) => {
+    const sortedFiles = [...files].sort((a, b) => {
+      if (a[property] < b[property]) return -1;
+      if (a[property] > b[property]) return 1;
+      return 0;
+    });
+    setFiles(sortedFiles);
+  };
+
   return (
     <div className="App">
       <header>
@@ -53,9 +63,11 @@ const App = () => {
       <main className="main">
         {selectedPreview && (
           <div className="preview-container">
-            <ResizableBox width={600} height={400} minConstraints={[300, 200]} maxConstraints={[800, 600]}>
-              <FilePreview file={selectedPreview} />
-            </ResizableBox>
+            <div className="resizable-box-container">
+              <ResizableBox width={600} height={400} minConstraints={[300, 200]} maxConstraints={[800, 600]}>
+                <FilePreview file={selectedPreview} />
+              </ResizableBox>
+            </div>
           </div>
         )}
         <div className="form-and-table">
@@ -63,24 +75,7 @@ const App = () => {
             <input type="file" onChange={handleFileUpload} />
             <button type="submit">Upload</button>
           </form>
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Size</th>
-                <th>Type</th>
-              </tr>
-            </thead>
-            <tbody>
-              {files.map((file) => (
-                <tr key={file.name} onClick={() => handleFileClick(file)}>
-                  <td>{file.name}</td>
-                  <td>{file.size}</td>
-                  <td>{file.type}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <FileTable files={files} onFileClick={handleFileClick} onSort={handleSort} />
         </div>
       </main>
       <footer>
