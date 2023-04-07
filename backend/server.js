@@ -5,6 +5,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const fs = require('fs');
 const path = require("path");
+const ffmpeg = require('fluent-ffmpeg');
 
 // Create the Express app, like building a warehouse for file storage
 const app = express();
@@ -37,6 +38,24 @@ app.post("/upload", upload.single("file"), (req, res) => {
   // When a file is uploaded, send a success message like saying "job well done!"
   res.status(200).send("File uploaded successfully.");
 });
+
+app.post('/convert', upload.single('file'), (req, res) => {
+  const inputPath = req.file.path;
+  const outputPath = `uploads/${Date.now()}-converted.mp4`;
+
+  ffmpeg(inputPath)
+    .output(outputPath)
+    .on('end', () => {
+      console.log('Conversion finished');
+      res.status(200).send('File converted successfully.');
+    })
+    .on('error', (err) => {
+      console.log('Error:', err.message);
+      res.status(500).send('Error converting file.');
+    })
+    .run();
+});
+
 
 app.get("/files", (req, res) => {
   const uploadsDir = path.join(__dirname, "uploads");

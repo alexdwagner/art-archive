@@ -6,17 +6,17 @@ function FilePreview({ file }) {
   const renderPreview = () => {
     if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'tiff'].includes(fileExtension)) {
       return <img src={file.url} alt="preview" />;
-    } else if (['mp4', 'webm', 'ogv'].includes(fileExtension)) {
+    } else if (['mp4', 'webm', 'ogv', 'mov'].includes(fileExtension)) {
       return (
         <video width="320" height="240" controls>
-          <source src={file.url} type={`video/${fileExtension}`} />
+          <source src={file.url} type={`video/${fileExtension === 'mov' ? 'quicktime' : fileExtension}`} />
           Your browser does not support the video tag.
         </video>
       );
-    } else if (['mp3', 'wav', 'ogg'].includes(fileExtension)) {
+    } else if (['mp3', 'wav', 'ogg', 'm4a'].includes(fileExtension)) {
       return (
         <audio controls>
-          <source src={file.url} type={`audio/${fileExtension}`} />
+          <source src={file.url} type={`audio/${fileExtension === 'm4a' ? 'mp4' : fileExtension}`} />
           Your browser does not support the audio tag.
         </audio>
       );
