@@ -6,6 +6,9 @@ import "./Itunes.css";
 import { ResizableBox } from "react-resizable";
 import "./styles.css";
 
+// import "./App.css";
+
+
 const App = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [files, setFiles] = useState([]);
@@ -63,11 +66,9 @@ const App = () => {
       <main className="main">
         {selectedPreview && (
           <div className="preview-container">
-            <div className="resizable-box-container">
-              <ResizableBox width={600} height={400} minConstraints={[300, 200]} maxConstraints={[800, 600]}>
-                <FilePreview file={selectedPreview} />
-              </ResizableBox>
-            </div>
+            <ResizableBox width={600} height={400} minConstraints={[300, 200]} maxConstraints={[800, 600]}>
+              <FilePreview file={selectedPreview} />
+            </ResizableBox>
           </div>
         )}
         <div className="form-and-table">

@@ -1,40 +1,66 @@
-import React from "react";
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import { Resizable } from "react-resizable";
+import "./FileTable.css";
 
-const FileTable = ({ files, sortField, sortDirection, onFileClick }) => {
-  const sortedFiles = files.slice().sort((a, b) => {
-    const fieldA = a[sortField];
-    const fieldB = b[sortField];
-    let comparison = 0;
+const FileTable = ({ files, onFileClick }) => {
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "" });
 
-    if (fieldA < fieldB) {
-      comparison = -1;
-    } else if (fieldA > fieldB) {
-      comparison = 1;
+  const handleSort = (key) => {
+    let direction = "ascending";
+    if (sortConfig.key === key && sortConfig.direction === "ascending") {
+      direction = "descending";
     }
+    setSortConfig({ key, direction });
+  };
 
-    return sortDirection === "asc" ? comparison : -comparison;
+  const sortedFiles = [...files].sort((a, b) => {
+    if (a[sortConfig.key] < b[sortConfig.key]) {
+      return sortConfig.direction === "ascending" ? -1 : 1;
+    }
+    if (a[sortConfig.key] > b[sortConfig.key]) {
+      return sortConfig.direction === "ascending" ? 1 : -1;
+    }
+    return 0;
   });
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th onClick={() => onFileClick("name")}>Name</th>
-          <th onClick={() => onFileClick("size")}>Size</th>
-          <th onClick={() => onFileClick("type")}>Type</th>
-        </tr>
-      </thead>
-      <tbody>
-        {sortedFiles.map((file) => (
-          <tr key={file.name} onClick={() => onFileClick(file)}>
-            <td>{file.name}</td>
-            <td>{file.size}</td>
-            <td>{file.type}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <div>
+      <Resizable>
+        <table>
+          <thead>
+            <tr>
+              <th onClick={() => handleSort("name")}>
+                Name {sortConfig.key === "name" && <span>{sortConfig.direction === "ascending" ? "▲" : "▼"}</span>}
+              </th>
+              <th onClick={() => handleSort("type")}>
+                Type {sortConfig.key === "type" && <span>{sortConfig.direction === "ascending" ? "▲" : "▼"}</span>}
+              </th>
+              <th onClick={() => handleSort("size")}>
+                Size {sortConfig.key === "size" && <span>{sortConfig.direction === "ascending" ? "▲" : "▼"}</span>}
+              </th>
+              <th>Created At</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sortedFiles.map((file) => (
+              <tr key={file.name} onClick={() => onFileClick(file)}>
+                <td>{file.name}</td>
+                <td>{file.type}</td>
+                <td>{file.size}</td>
+                <td>{new Date(file.createdAt).toLocaleDateString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </Resizable>
+    </div>
   );
+};
+
+FileTable.propTypes = {
+  files: PropTypes.array.isRequired,
+  onFileClick: PropTypes.func.isRequired,
 };
 
 export default FileTable;
