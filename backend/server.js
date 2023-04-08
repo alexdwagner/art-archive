@@ -11,7 +11,6 @@ const ffmpeg = require('fluent-ffmpeg');
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 
-
 // Enable CORS like telling the security guard to let certain visitors in
 app.use(cors());
 
@@ -33,8 +32,7 @@ const storage = multer.diskStorage({
 // Initialize multer with the storage configuration like hiring a warehouse worker
 const upload = multer({ storage });
 
-// Create a route for handling file uploads like building a specific doorway for deliveries
-app.post("/upload", upload.single("file"), (req, res) => {
+app.post('/upload', upload.single('file'), (req, res) => {
   // When a file is uploaded, send a success message like saying "job well done!"
   res.status(200).send("File uploaded successfully.");
 });
@@ -56,8 +54,7 @@ app.post('/convert', upload.single('file'), (req, res) => {
     .run();
 });
 
-
-app.get("/files", (req, res) => {
+app.get("/uploads", (req, res) => {
   const uploadsDir = path.join(__dirname, "uploads");
   fs.readdir(uploadsDir, (err, files) => {
     if (err) {
@@ -80,9 +77,11 @@ app.get("/files", (req, res) => {
       };
     });
 
+    res.set('Content-Type', 'application/json');
     res.json(fileList);
   });
 });
+
 
 console.log("Static files path:", path.join(__dirname, "uploads"));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));

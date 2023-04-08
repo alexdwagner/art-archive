@@ -1,7 +1,11 @@
 import React from 'react';
 
 function FilePreview({ file }) {
-  const fileExtension = file.name.split('.').pop().toLowerCase();
+  if (!file) {
+    return null;
+  }
+
+  const fileExtension = file.name ? file.name.split('.').pop().toLowerCase() : '';
 
   const renderPreview = () => {
     if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'tiff'].includes(fileExtension)) {
@@ -45,6 +49,6 @@ function FilePreview({ file }) {
   };
 
   return <div>{renderPreview()}</div>;
-}
+};
 
 export default FilePreview;
