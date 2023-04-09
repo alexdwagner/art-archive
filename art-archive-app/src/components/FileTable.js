@@ -22,14 +22,12 @@ const FileTable = ({ files, onFileClick, columnWidths }) => {
     );
   }
 
-  // Filter out undefined files
-  console.log("Files array:", files);
+  // Filter out undefined files and files without a name property
   const definedFiles = files.filter((file) => file && file.name);
-  console.log("Defined files array:", definedFiles);
-
 
   // Sort files based on sortConfig
-  const sortedFiles = [...definedFiles].sort((a, b) => {
+  const sortedFiles = [...files].sort((a, b) => {
+
     if (a[sortConfig.key] < b[sortConfig.key]) {
       return sortConfig.direction === 'ascending' ? -1 : 1;
     }
@@ -54,26 +52,17 @@ const FileTable = ({ files, onFileClick, columnWidths }) => {
         columnWidths={columnWidths}
       />
       <tbody>
-        {sortedFiles.length > 0 &&
-          sortedFiles.map((file, index) => {
-            if (!file || !file.name) {
-              console.error(
-                `File at index ${index} is missing a name property`,
-                file
-              );
-              return null;
-            }
-            const tags = file.tags && file.tags.join(', ');
-            const createdAt = new Date(file.createdAt).toLocaleString();
-            const size = file.size ? file.size.toLocaleString() : '';
-            return (
-              <TableRow
-                key={file.name}
-                file={{ ...file, tags, createdAt, size }} // spread in the updated properties
-                onFileClick={onFileClick}
-              />
-            );
-          })}
+        {sortedFiles.map((file, index) => {
+          const tags = file.tags?.join(', ');
+          const createdAt = file.createdAt
+            ? new Date(file.createdAt).toLocaleString()
+            : '';
+          const size = file.size ? file.size.toLocaleString() : '';
+          return (
+            <TableRow key={file?.name} file={{ ...file, tags, createdAt, size }} onFileClick={onFileClick} />
+
+          );
+        })}
       </tbody>
     </table>
   );
