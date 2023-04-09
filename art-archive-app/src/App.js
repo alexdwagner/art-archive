@@ -5,12 +5,12 @@ import FileUploadForm from "./components/FileUploadForm";
 import { ResizableBox } from "react-resizable";
 import FilePreview, { supportedImageFormats } from "./components/FilePreview";
 
-
 import "./Itunes.css";
 import "./styles.css";
 
 const App = () => {
   const [fileList, setFileList] = useState([]);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const fetchFileList = async () => {
     try {
@@ -30,6 +30,9 @@ const App = () => {
     fetchFileList();
   };
 
+  // Log the data being passed to FileTable
+  console.log("Data being passed to FileTable:", fileList);
+
   return (
     <ErrorBoundary>
       <div className="App">
@@ -38,15 +41,20 @@ const App = () => {
         </header>
         <main className="main">
           <ResizableBox width={500} height={400} minConstraints={[300, 200]}>
-            {fileList.length > 0 ? (
-              <FilePreview file={fileList.find((file) => supportedImageFormats.includes(file.type))} />
+            {selectedFile ? (
+              <FilePreview file={selectedFile} />
             ) : (
-              <div>No files to display</div>
+              <div>No file selected</div>
             )}
           </ResizableBox>
           <div className="form-and-table">
             <FileUploadForm updateFileList={updateFileList} />
-            <FileTable files={fileList} />
+            {/* Pass fileList to the FileTable component */}
+            <FileTable
+              data={fileList}
+              onFileClick={(file) => setSelectedFile(file)}
+              columnWidths={[200, 200, 100]}
+            />
           </div>
         </main>
         <footer>
