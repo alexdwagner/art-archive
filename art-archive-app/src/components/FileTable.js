@@ -23,7 +23,10 @@ const FileTable = ({ files, onFileClick, columnWidths }) => {
   }
 
   // Filter out undefined files
-  const definedFiles = files.filter((file) => file !== undefined);
+  console.log("Files array:", files);
+  const definedFiles = files.filter((file) => file && file.name);
+  console.log("Defined files array:", definedFiles);
+
 
   // Sort files based on sortConfig
   const sortedFiles = [...definedFiles].sort((a, b) => {
