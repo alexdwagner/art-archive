@@ -3,35 +3,35 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import FileTable from "./components/FileTable";
 import FileUploadForm from "./components/FileUploadForm";
 import { ResizableBox } from "react-resizable";
-import FilePreview, { supportedImageFormats } from "./components/FilePreview";
+import FilePreview from "./components/FilePreview";
 
 import "./Itunes.css";
 import "./styles.css";
 
 const App = () => {
-  const [fileList, setFileList] = useState([]);
+  const [data, setData] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
 
-  const fetchFileList = async () => {
+  const fetchData = async () => {
     try {
       const response = await fetch("http://localhost:3001/uploads");
       const data = await response.json();
-      setFileList(data);
+      setData(data);
     } catch (error) {
       console.error("Error fetching file list:", error);
     }
   };
 
   useEffect(() => {
-    fetchFileList();
+    fetchData();
   }, []);
 
-  const updateFileList = () => {
-    fetchFileList();
+  const updateData = () => {
+    fetchData();
   };
 
   // Log the data being passed to FileTable
-  console.log("Data being passed to FileTable:", fileList);
+  console.log("Data being passed to FileTable:", data);
 
   return (
     <ErrorBoundary>
@@ -48,10 +48,9 @@ const App = () => {
             )}
           </ResizableBox>
           <div className="form-and-table">
-            <FileUploadForm updateFileList={updateFileList} />
-            {/* Pass fileList to the FileTable component */}
+            <FileUploadForm updateData={updateData} />
             <FileTable
-              data={fileList}
+              data={data}
               onFileClick={(file) => setSelectedFile(file)}
               columnWidths={[200, 200, 100]}
             />

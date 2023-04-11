@@ -9,7 +9,7 @@ const ffmpeg = require('fluent-ffmpeg');
 
 // Create the Express app, like building a warehouse for file storage
 const app = express();
-app.use(express.urlencoded({ extended: true }));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Enable CORS like telling the security guard to let certain visitors in
 app.use(cors());
