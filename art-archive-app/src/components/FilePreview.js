@@ -1,95 +1,34 @@
 import React from 'react';
-import './Resizable.css';
-
-export const supportedImageFormats = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/webp', 'image/tiff'];
-
-const fileTypeToMimeType = (fileType) => {
-  const fileTypes = {
-    jpg: 'image/jpeg',
-    jpeg: 'image/jpeg',
-    png: 'image/png',
-    gif: 'image/gif',
-    bmp: 'image/bmp',
-    webp: 'image/webp',
-    tiff: 'image/tiff',
-    svg: 'image/svg+xml',
-    mp3: 'audio/mpeg',
-    wav: 'audio/wav',
-    m4a: 'audio/m4a',
-    mp4: 'video/mp4',
-    mov: 'video/mov',
-    webm: 'video/webm',
-    txt: 'text/plain',
-    pdf: 'application/pdf',
-  };
-
-  return fileTypes[fileType] || null;
-};
-
-
+import { fileTypeToMimeType } from '../utils/MimeTypes';
+import ImagePreview from './ImagePreview';
+import AudioPreview from './AudioPreview';
+import VideoPreview from './VideoPreview';
+import TextPreview from './TextPreview';
+import PdfPreview from './PdfPreview';
 
 const FilePreview = ({ file }) => {
-  console.log("File in FilePreview:", file);
-
-  if (!file) {
-    return null;
-  }
-
   const renderPreview = () => {
     const mimeType = fileTypeToMimeType(file.type);
-  
+
     if (!mimeType) {
       return <p>Unsupported file type</p>;
     }
-  
+
     if (mimeType.startsWith('image')) {
-      return (
-        <img
-          src={file.url}
-          alt="preview"
-          style={{ objectFit: 'contain', maxWidth: '100%', maxHeight: '100%' }}
-        />
-      );
+      return <ImagePreview src={file.url} />;
     } else if (mimeType.startsWith('audio')) {
-      return <audio src={file.url} controls style={{ width: '100%' }} />;
+      return <AudioPreview file={file} />;
     } else if (mimeType.startsWith('video')) {
-      return (
-        <video
-          src={file.url}
-          controls
-          style={{ objectFit: 'contain', maxWidth: '100%', maxHeight: '100%' }}
-        />
-      );
+      return <VideoPreview src={file.url} />;
     } else if (mimeType === 'text/plain') {
-      return (
-        <iframe
-          title="text-preview"
-          src={file.url}
-          style={{ width: '100%', height: '100%', border: 'none' }}
-        />
-      );
+      return <TextPreview src={file.url} />;
     } else if (mimeType === 'application/pdf') {
-      return (
-        <iframe
-          title="pdf-preview"
-          src={file.url}
-          style={{ width: '100%', height: '100%', border: 'none' }}
-        />
-      );
+      return <PdfPreview src={file.url} />;
     }
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '100%',
-        height: '100%',
-        overflow: 'hidden',
-      }}
-    >
+    <div className="preview-container">
       {renderPreview()}
     </div>
   );
