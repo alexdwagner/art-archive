@@ -1,21 +1,20 @@
-import React, { useState } from 'react';
-import TableHeader from './TableHeader';
-import TableRow from './TableRow';
+import React, { useState } from "react";
+import TableHeader from "./TableHeader";
+import TableRow from "./TableRow";
 
 const FileTable = ({ data, onFileClick, columnWidths }) => {
-  console.log('data:', data);
+  console.log("Received props:", { data, onFileClick, columnWidths });
 
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: '' });
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "" });
 
   const handleSort = (key) => {
-    let direction = 'ascending';
-    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
-      direction = 'descending';
+    let direction = "ascending";
+    if (sortConfig.key === key && sortConfig.direction === "ascending") {
+      direction = "descending";
     }
     setSortConfig({ key, direction });
   };
 
-  // Display a message when no files are available
   if (!data || data.length === 0) {
     return (
       <div>
@@ -24,37 +23,35 @@ const FileTable = ({ data, onFileClick, columnWidths }) => {
     );
   }
 
-  // Filter out undefined data items and items without a name property
   const definedData = data.filter((item) => {
     if (!item) {
-      console.warn('Undefined data item found:', item);
+      console.warn("Undefined data item found:", item);
       return false;
     }
-    return item.hasOwnProperty('name');
+    return item.hasOwnProperty("name");
   });
 
-  // Sort data based on sortConfig
   const sortedData = [...definedData].sort((a, b) => {
     if (sortConfig.key === null) return 0;
     if (a[sortConfig.key] < b[sortConfig.key]) {
-      return sortConfig.direction === 'ascending' ? -1 : 1;
+      return sortConfig.direction === "ascending" ? -1 : 1;
     }
     if (a[sortConfig.key] > b[sortConfig.key]) {
-      return sortConfig.direction === 'ascending' ? 1 : -1;
+      return sortConfig.direction === "ascending" ? 1 : -1;
     }
     return 0;
   });
 
-  console.log('sortedData:', sortedData);
+  console.log("sortedData:", sortedData);
 
   return (
     <table>
       <colgroup>
-        <col style={{ width: `${columnWidths.name}px` }} />
-        <col style={{ width: `${columnWidths.type}px` }} />
-        <col style={{ width: `${columnWidths.size}px` }} />
-        <col style={{ width: `${columnWidths.createdAt}px` }} />
-        <col style={{ width: `${columnWidths.tags}px` }} />
+        <col style={{ width: `${columnWidths[0]}px` }} />
+        <col style={{ width: `${columnWidths[1]}px` }} />
+        <col style={{ width: `${columnWidths[2]}px` }} />
+        <col style={{ width: `${columnWidths[3]}px` }} />
+        <col style={{ width: `${columnWidths[4]}px` }} />
       </colgroup>
       <TableHeader
         handleSort={handleSort}
@@ -77,12 +74,14 @@ const FileTable = ({ data, onFileClick, columnWidths }) => {
               key={item.name}
               file={{ ...item, tags, createdAt, size }}
               onFileClick={onFileClick}
+              columnWidths={columnWidths} // Pass columnWidths prop here
             />
           );
         })}
       </tbody>
     </table>
   );
+  
 };
 
 export default FileTable;

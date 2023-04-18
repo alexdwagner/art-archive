@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import ErrorBoundary from "./components/ErrorBoundary";
 import FileTable from "./components/FileTable";
 import FileUploadForm from "./components/FileUploadForm";
-import { ResizableBox } from "react-resizable";
-import FilePreview from "./components/FilePreview";
-
+import AudioPreview from "./components/AudioPreview";
+import FilePreview from "./components/FilePreview"; // Import FilePreview component
 import "./Itunes.css";
 import "./styles.css";
 
@@ -14,7 +13,7 @@ const App = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("http://localhost:3001/uploads");
+      const response = await fetch("http://localhost:3001/uploads/");
       const data = await response.json();
       setData(data);
     } catch (error) {
@@ -26,11 +25,20 @@ const App = () => {
     fetchData();
   }, []);
 
-  const updateData = () => {
-    fetchData();
+  const fetchFileBlob = async (url) => {
+    console.log("Fetching file:", url);
+    try {
+      const response = await fetch(url);
+      console.log("Response status:", response.status);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return await response.blob();
+    } catch (error) {
+      console.error("Error fetching file blob:", error);
+    }
   };
 
-  // Log the data being passed to FileTable
   console.log("Data being passed to FileTable:", data);
 
   return (
@@ -40,18 +48,23 @@ const App = () => {
           <h1>Art Archive</h1>
         </header>
         <main className="main">
-          <ResizableBox width={500} height={400} minConstraints={[300, 200]}>
-            {selectedFile ? (
-              <FilePreview file={selectedFile} />
-            ) : (
-              <div>No file selected</div>
-            )}
-          </ResizableBox>
+          {selectedFile && selectedFile.type.startsWith("audio/") ? (
+            <AudioPreview file={selectedFile} />
+          ) : (
+            <FilePreview file={selectedFile} />
+          )}
           <div className="form-and-table">
-            <FileUploadForm updateData={updateData} />
+            <FileUploadForm updateData={fetchData} />
             <FileTable
               data={data}
-              onFileClick={(file) => setSelectedFile(file)}
+              onFileClick={async (file) => {
+                console.log("File data in onFileClick:", file);
+                const blob = await fetchFileBlob(file.url);
+                console.log("Blob data:", blob);
+                setSelectedFile(
+                  new File([blob], file.name, { type: blob.type })
+                );
+              }}
               columnWidths={[200, 200, 100]}
             />
           </div>

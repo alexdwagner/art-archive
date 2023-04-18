@@ -1,4 +1,3 @@
-// Gather necessary ingredients like a chef preparing a dish
 const express = require("express");
 const multer = require("multer");
 const cors = require("cors");
@@ -7,33 +6,33 @@ const fs = require('fs');
 const path = require("path");
 const ffmpeg = require('fluent-ffmpeg');
 
-// Create the Express app, like building a warehouse for file storage
 const app = express();
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Enable CORS like telling the security guard to let certain visitors in
-app.use(cors());
+// Add a custom middleware to add CORS headers to static files
+app.use("/uploads", (req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.setHeader("Access-Control-Allow-Methods", "GET");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  next();
+}, express.static(path.join(__dirname, "uploads")));
 
-// Enable morgan
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+
 app.use(morgan("dev"));
 
-// Configure multer like setting up the warehouse's storage system
 const storage = multer.diskStorage({
-  // Choose where to store the files, like deciding on a shelf for each item
   destination: (req, file, cb) => {
     cb(null, "uploads/");
   },
-  // Set the file's name like labeling each box in the warehouse
   filename: (req, file, cb) => {
     cb(null, Date.now() + "-" + file.originalname);
   },
 });
 
-// Initialize multer with the storage configuration like hiring a warehouse worker
 const upload = multer({ storage });
 
 app.post('/upload', upload.single('file'), (req, res) => {
-  // When a file is uploaded, send a success message like saying "job well done!"
   res.status(200).send("File uploaded successfully.");
 });
 
@@ -82,11 +81,6 @@ app.get("/uploads", (req, res) => {
   });
 });
 
-
-console.log("Static files path:", path.join(__dirname, "uploads"));
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
-// Start the server like opening the warehouse for business
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
