@@ -1,5 +1,6 @@
 import React from 'react';
 
+// PlaybackControls.js
 const PlaybackControls = ({
   playing,
   onPlayPause,
@@ -7,8 +8,6 @@ const PlaybackControls = ({
   playbackRate,
   onPlaybackRateChange,
 }) => {
-  console.log('PlaybackControls - playing:', playing); // Add this line
-
   const handlePlaybackRateChange = (e) => {
     onPlaybackRateChange(parseFloat(e.target.value));
   };
@@ -33,3 +32,4 @@ const PlaybackControls = ({
 };
 
 export default PlaybackControls;
+

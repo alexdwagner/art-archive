@@ -1,60 +1,67 @@
-import React, { useState } from "react";
-import Waveform from "./Waveform";
-import PlaybackControls from "./PlaybackControls";
+import React, { useRef, useEffect } from "react";
+import WaveSurfer from "wavesurfer.js";
+import "./AudioPreview.css";
 
-const AudioPreview = ({ files }) => {
-  const [playing, setPlaying] = useState(false);
-  const [playbackRate, setPlaybackRate] = useState(1);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [currentFileIndex, setCurrentFileIndex] = useState(0);
+const AudioPreview = ({ file }) => {
+  const waveformRef = useRef(null);
+  const wavesurfer = useRef(null);
 
-  if (!files || files.length === 0) {
-    return <div>No files to preview</div>;
-  }
+  useEffect(() => {
+    if (file) {
+      wavesurfer.current = WaveSurfer.create({
+        container: waveformRef.current,
+        waveColor: "#D9DCFF",
+        progressColor: "#4353FF",
+        cursorColor: "#4353FF",
+        barWidth: 3,
+        barRadius: 3,
+        cursorWidth: 1,
+        height: 80,
+        barGap: 3,
+        plugins: [],
+      });
 
-  const handlePlayPause = () => {
-    setPlaying(!playing);
+      wavesurfer.current.load(URL.createObjectURL(file));
+
+      return () => {
+        wavesurfer.current.destroy();
+      };
+    }
+  }, [file]);
+
+  const handlePlay = () => {
+    wavesurfer.current.playPause();
   };
 
   const handleStop = () => {
-    setPlaying(false);
+    wavesurfer.current.stop();
   };
 
-  const formatTime = (time) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+  const handleChangeSpeed = (event) => {
+    wavesurfer.current.setPlaybackRate(parseFloat(event.target.value));
   };
 
-  console.log("Rendering AudioPreview with files:", files);
+  if (!file) {
+    return <div>Select an audio file...</div>;
+  }
 
   return (
-    <div>
-      <h2>{files[currentFileIndex].name}</h2>
-      <Waveform
-        file={files[currentFileIndex]}
-        playing={playing}
-        onReady={(wavesurfer) => {
-          setDuration(wavesurfer.getDuration());
-          wavesurfer.setPlaybackRate(playbackRate);
-        }}
-        onAudioProcess={setCurrentTime}
-        onFinish={() => {
-          if (currentFileIndex < files.length - 1) {
-            setCurrentFileIndex(currentFileIndex + 1);
-          }
-        }}
-      />
-      <PlaybackControls
-        playing={playing}
-        onPlayPause={handlePlayPause}
-        onStop={handleStop}
-        playbackRate={playbackRate}
-        onPlaybackRateChange={setPlaybackRate}
-      />
-      <div>
-        Current Time: {formatTime(currentTime)} / {formatTime(duration)}
+    <div className="audio-preview">
+      <div className="waveform-container">
+        <div id="waveform" ref={waveformRef} />
+      </div>
+      <div className="controls">
+        <button onClick={handlePlay}>Play/Pause</button>
+        <button onClick={handleStop}>Stop</button>
+        <label htmlFor="speed">Speed: </label>
+      <select id="speed" defaultValue="1" onChange={handleChangeSpeed}>
+        <option value="0.5">0.5x</option>
+        <option value="0.75">0.75x</option>
+        <option value="1">Normal</option>
+        <option value="1.25">1.25x</option>
+        <option value="1.5">1.5x</option>
+        <option value="2">2x</option>
+      </select>
       </div>
     </div>
   );

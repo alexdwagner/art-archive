@@ -1,14 +1,13 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import WaveSurfer from 'wavesurfer.js';
 
-const Waveform = ({ file, playing, onReady, onAudioProcess, onFinish }) => {
+const Waveform = ({ file, onReady, onAudioProcess, onFinish }) => {
   const waveformRef = useRef(null);
   const wavesurfer = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false); // Add this line
 
   useEffect(() => {
     if (file) {
-      console.log('Waveform - file:', file); // Add this line
-
       wavesurfer.current = WaveSurfer.create({
         container: waveformRef.current,
         waveColor: 'violet',
@@ -41,9 +40,13 @@ const Waveform = ({ file, playing, onReady, onAudioProcess, onFinish }) => {
 
   useEffect(() => {
     if (wavesurfer.current) {
-      playing ? wavesurfer.current.play() : wavesurfer.current.pause();
+      isPlaying ? wavesurfer.current.play() : wavesurfer.current.pause();
     }
-  }, [playing]);
+  }, [isPlaying]); // Update this line
+
+  const handlePlayPause = () => {
+    setIsPlaying((prevIsPlaying) => !prevIsPlaying);
+  };
 
   return <div ref={waveformRef} />;
 };

@@ -11,7 +11,7 @@ const FilePreview = ({ file }) => {
     case "image":
       return <ImagePreview file={file} />;
     case "audio":
-      return <AudioPreview files={[file]} />;
+      return <AudioPreview file={[file]} />;
     default:
       return <div>Unsupported file type</div>;
   }
