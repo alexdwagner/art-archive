@@ -1,25 +1,20 @@
 import React from 'react';
+import HeaderCell from './HeaderCell';
 
 const TableHeader = ({ handleSort, sortConfig, columnWidths }) => {
-  const renderSortIcon = (key) => {
-    if (sortConfig.key === key) {
-      return <span>{sortConfig.direction === 'ascending' ? '▲' : '▼'}</span>;
-    }
-    return null;
-  };
+  const headerKeys = ['name', 'type', 'size', 'createdAt', 'tags'];
 
   return (
     <thead>
       <tr>
-        {['name', 'type', 'size', 'createdAt', 'tags'].map((key, index) => (
-          <th
+        {headerKeys.map((key) => (
+          <HeaderCell
             key={key}
-            onClick={() => handleSort(key)}
-            style={{ width: `${columnWidths[key]}px` }}
-          >
-            {key.charAt(0).toUpperCase() + key.slice(1)}
-            {renderSortIcon(key)}
-          </th>
+            keyName={key}
+            handleSort={handleSort}
+            sortConfig={sortConfig}
+            columnWidths={columnWidths}
+          />
         ))}
       </tr>
     </thead>
