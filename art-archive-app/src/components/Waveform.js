@@ -44,9 +44,9 @@ const Waveform = ({ file, onReady, onAudioProcess, onFinish }) => {
     }
   }, [isPlaying]); // Update this line
 
-  const handlePlayPause = () => {
-    setIsPlaying((prevIsPlaying) => !prevIsPlaying);
-  };
+  // const handlePlayPause = () => {
+  //   setIsPlaying((prevIsPlaying) => !prevIsPlaying);
+  // };
 
   return <div ref={waveformRef} />;
 };

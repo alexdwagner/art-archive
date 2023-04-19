@@ -41,6 +41,14 @@ const AudioPreview = ({ file }) => {
     wavesurfer.current.setPlaybackRate(parseFloat(event.target.value));
   };
 
+
+  
+  const handleVolumeChange = (event) => {
+    const volume = parseFloat(event.target.value);
+    wavesurfer.current.setVolume(volume);
+  };
+  
+
   if (!file) {
     return <div>Select an audio file...</div>;
   }
@@ -53,6 +61,16 @@ const AudioPreview = ({ file }) => {
       <div className="controls">
         <button onClick={handlePlay}>Play/Pause</button>
         <button onClick={handleStop}>Stop</button>
+        <label htmlFor="volume">Volume: </label>
+      <input
+        id="volume"
+        type="range"
+        min="0"
+        max="1"
+        step="0.01"
+        defaultValue="1"
+        onChange={handleVolumeChange}
+      />
         <label htmlFor="speed">Speed: </label>
       <select id="speed" defaultValue="1" onChange={handleChangeSpeed}>
         <option value="0.5">0.5x</option>
