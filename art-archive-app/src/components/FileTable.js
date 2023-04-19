@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
+import TableActions from "./TableActions";
 
 const FileTable = ({ data, onFileClick, columnWidths }) => {
   console.log("Received props:", { data, onFileClick, columnWidths });
 
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "" });
+  const [selectedRows, setSelectedRows] = useState([]);
 
   const handleSort = (key) => {
     let direction = "ascending";
@@ -13,6 +15,10 @@ const FileTable = ({ data, onFileClick, columnWidths }) => {
       direction = "descending";
     }
     setSortConfig({ key, direction });
+  };
+
+  const handleDelete = (name) => {
+    setSelectedRows((prevState) => prevState.filter((row) => row.name !== name));
   };
 
   if (!data || data.length === 0) {
@@ -74,6 +80,7 @@ const FileTable = ({ data, onFileClick, columnWidths }) => {
               key={item.name}
               file={{ ...item, tags, createdAt, size }}
               onFileClick={onFileClick}
+              handleDelete={() => handleDelete(item.name)} // pass handleDelete as a prop
               columnWidths={columnWidths} // Pass columnWidths prop here
             />
           );
@@ -81,7 +88,6 @@ const FileTable = ({ data, onFileClick, columnWidths }) => {
       </tbody>
     </table>
   );
-  
-};
+      };
 
-export default FileTable;
+      export default FileTable;
