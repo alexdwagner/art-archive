@@ -1,87 +1,38 @@
 import React, { useState, useEffect } from "react";
-import ErrorBoundary from "./components/ErrorBoundary";
 import FileTable from "./components/FileTable";
-import FileUploadForm from "./components/FileUploadForm";
-import AudioPreview from "./components/AudioPreview";
-import FilePreview from "./components/FilePreview";
-import useFileData from "./hooks/useFileData";
-import "./Itunes.css";
-import "./styles.css";
 
 const App = () => {
   const [data, setData] = useState([]);
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [selectedItems, setSelectedItems] = useState([]);
-  const { items, toggleSelect, toggleSelectAll, deleteSelectedItems } =
-    useFileData(data);
 
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch("http://localhost:3001/uploads/");
         const data = await response.json();
-        setData(data);
+        console.log("Fetched data:", data);
+        setData(data); // Update the state with the fetched data
       } catch (error) {
-        console.error("Error fetching file list:", error);
+        console.error("Error fetching data:", error);
       }
     };
-    
-    
 
-  useEffect(() => {
     fetchData();
   }, []);
 
-  const fetchFileBlob = async (url) => {
-    console.log("Fetching file:", url);
-    try {
-      const response = await fetch(url);
-      console.log("Response status:", response.status);
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return await response.blob();
-    } catch (error) {
-      console.error("Error fetching file blob:", error);
-    }
+  const onDataChange = (newData) => {
+    setData(newData);
   };
 
-  console.log("Data being passed to FileTable:", data);
+  const columnWidths = [30, 200, 100, 100, 100];
 
   return (
-    <ErrorBoundary>
-      <div className="App">
-        <header>
-          <h1>Art Archive</h1>
-        </header>
-        <main className="main">
-          {selectedFile && selectedFile.type.startsWith("audio/") ? (
-            <AudioPreview file={selectedFile} />
-          ) : (
-            <FilePreview file={selectedFile} />
-          )}
-          <div className="form-and-table">
-            <FileUploadForm updateData={fetchData} />
-            <FileTable
-  data={data} // Change from 'items' to 'data'
-  onFileClick={async (file) => {
-    console.log("File data in onFileClick:", file);
-    const blob = await fetchFileBlob(file.url);
-    console.log("Blob data:", blob);
-    setSelectedFile(
-      new File([blob], file.name, { type: blob.type })
-    );
-  }}
-  columnWidths={[200, 200, 100, 100, 100]}
-/>
-
-
-          </div>
-        </main>
-        <footer>
-          <p>&copy; 2023 Art Archive. All rights reserved.</p>
-        </footer>
-      </div>
-    </ErrorBoundary>
+    <div>
+      <FileTable
+        data={data}
+        onDataChange={onDataChange}
+        columnWidths={columnWidths}
+      />
+    </div>
   );
 };
 

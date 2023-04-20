@@ -4,7 +4,8 @@ import TableRow from "./TableRow";
 import TableActions from "./TableActions";
 import useFileData from "../hooks/useFileData";
 
-const FileTable = ({ data, onFileClick, columnWidths }) => {
+const FileTable = ({ data, onFileClick, columnWidths, onDataChange }) => {
+  console.log("FileTable data:", data);
   const {
     items: sortedData,
     requestSort: handleSort,
@@ -17,7 +18,7 @@ const FileTable = ({ data, onFileClick, columnWidths }) => {
 
   const handleDelete = () => {
     const newItems = deleteSelectedItems();
-    // Update your data source (e.g., state or API) with newItems
+    onDataChange(newItems);
   };
 
   if (!sortedData || sortedData.length === 0) {
