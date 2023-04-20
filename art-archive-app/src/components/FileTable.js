@@ -2,14 +2,23 @@ import React from "react";
 import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
 import TableActions from "./TableActions";
-import { useSortableData } from "../hooks/useSortableData";
-import { useSelectableData } from "../hooks/useSelectableData";
-import { useDeletableData } from "../hooks/useDeletableData";
+import useFileData from "../hooks/useFileData";
 
 const FileTable = ({ data, onFileClick, columnWidths }) => {
-  const { items: sortedData, requestSort: handleSort, sortConfig } = useSortableData(data);
-  const { selectedItems: selectableData, toggleSelectAll, toggleSelect } = useSelectableData(sortedData);
-  const { deleteSelectedItems: handleDelete } = useDeletableData(selectableData);
+  const {
+    items: sortedData,
+    requestSort: handleSort,
+    sortConfig,
+    toggleSelect,
+    toggleSelectAll,
+    selectedItems,
+    deleteSelectedItems,
+  } = useFileData(data);
+
+  const handleDelete = () => {
+    const newItems = deleteSelectedItems();
+    // Update your data source (e.g., state or API) with newItems
+  };
 
   if (!sortedData || sortedData.length === 0) {
     return (
@@ -45,10 +54,10 @@ const FileTable = ({ data, onFileClick, columnWidths }) => {
         ))}
       </tbody>
       <TableActions
-  selectedFiles={selectableData}
-  onDelete={handleDelete}
-/>
-
+        selectedFiles={selectedItems}
+        handleDelete={handleDelete}
+        handleSelectAll={toggleSelectAll}
+      />
     </table>
   );
 };

@@ -1,23 +1,36 @@
-import React from 'react';
+import React from "react";
 
-const TableRow = ({ file, onFileClick, columnWidths }) => {
-
-  const handleClick = () => {
-    console.log("File data in TableRow onClick:", file);
+const TableRow = ({
+  file,
+  onFileClick,
+  handleCheckboxChange,
+  isSelected,
+  columnWidths,
+}) => {
+  const handleRowClick = () => {
     onFileClick(file);
   };
 
+  const handleCheckboxClick = () => {
+    handleCheckboxChange(file.id, !isSelected);
+  };
+
   return (
-    <tr
-      className="file-table-row"
-      onClick={handleClick} // Use the handleClick function here
-    >
-      <td style={{ width: columnWidths[0] }}>{file.name}</td>
-      <td style={{ width: columnWidths[1] }}>{file.type}</td>
-      <td style={{ width: columnWidths[2] }}>{file.size} bytes</td>
+    <tr onClick={handleRowClick}>
+      <td>
+        <input
+          type="checkbox"
+          onChange={handleCheckboxClick}
+          checked={isSelected}
+        />
+      </td>
+      <td style={{ width: `${columnWidths[0]}px` }}>{file.name}</td>
+      <td style={{ width: `${columnWidths[1]}px` }}>{file.type}</td>
+      <td style={{ width: `${columnWidths[2]}px` }}>{file.size}</td>
+      <td style={{ width: `${columnWidths[3]}px` }}>{file.createdAt}</td>
+      <td style={{ width: `${columnWidths[4]}px` }}>{file.tags}</td>
     </tr>
   );
 };
 
 export default TableRow;
-

@@ -1,12 +1,17 @@
 import React from 'react';
 
 const HeaderCell = ({ keyName, handleSort, sortConfig, columnWidths }) => {
-  const renderSortIcon = (key) => {
-    if (sortConfig.key === key) {
-      return <span>{sortConfig.direction === 'ascending' ? '▲' : '▼'}</span>;
+  const renderSortIcon = (column) => {
+    if (!sortConfig || column.key !== sortConfig.key) {
+      return;
     }
-    return null;
+    return sortConfig.direction === "ascending" ? (
+      <i className="fas fa-sort-up"></i>
+    ) : (
+      <i className="fas fa-sort-down"></i>
+    );
   };
+  
 
   return (
     <th
