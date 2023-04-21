@@ -7,16 +7,24 @@ const TableRow = ({
   onDeleteClick,
   columnWidths
 }) => {
-  const { name, size, type, createdAt, tags } = file;
+  const {
+    id,
+    name,
+    size,
+    type,
+    createdAt,
+    tags
+  } = file;
+
   return (
-    <tr>
+    <tr key={id}>
       <td onClick={() => onFileClick(file)}>{name}</td>
       <td>{size}</td>
       <td>{type}</td>
       <td>{createdAt}</td>
       <td>{tags}</td>
       <td>
-        <button onClick={() => onDeleteClick(file)}>Delete</button>
+        <button onClick={() => onDeleteClick(id)}>Delete</button>
       </td>
     </tr>
   );

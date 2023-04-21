@@ -45,7 +45,7 @@ const FileTable = ({ data, onFileClick, onDeleteClick, columnWidths }) => {
     <table>
       <colgroup>
         {columnWidths.map((width, index) => (
-          <col key={index} style={{ width: `${width}px` }} />
+          <col key={`col-${index}`} style={{ width: `${width}px` }} />
         ))}
       </colgroup>
       <TableHeader
@@ -54,28 +54,26 @@ const FileTable = ({ data, onFileClick, onDeleteClick, columnWidths }) => {
         columnWidths={columnWidths}
       />
       <tbody>
-      // FileTable.js
-{sortedData.map((item, index) => {
-  if (!item) {
-    console.warn('Undefined data item found in sortedData:', item);
-    item = {}; // Provide an empty object as a fallback
-  }
-  const tags = item.tags?.join(', ');
-  const createdAt = item.createdAt
-    ? new Date(item.createdAt).toLocaleString()
-    : '';
-  const size = item.size ? item.size.toLocaleString() : '';
-  return (
-    <TableRow
-      key={item._id} // Use item.id as the key
-      file={{ ...item, tags, createdAt, size }}
-      onFileClick={onFileClick}
-      onDeleteClick={onDeleteClick} // pass onDeleteClick as a prop
-      columnWidths={columnWidths} // Pass columnWidths prop here
-    />
-  );
-})}
-
+        {sortedData.map((item) => {
+          if (!item) {
+            console.warn("Undefined data item found in sortedData:", item);
+            item = {}; // Provide an empty object as a fallback
+          }
+          const tags = item.tags?.join(", ");
+          const createdAt = item.createdAt
+            ? new Date(item.createdAt).toLocaleString()
+            : "";
+          const size = item.size ? item.size.toLocaleString() : "";
+          return (
+            <TableRow
+              key={`row-${item.id}`} // Use unique key with row prefix
+              file={{ ...item, tags, createdAt, size }}
+              onFileClick={onFileClick}
+              onDeleteClick={onDeleteClick} // pass onDeleteClick as a prop
+              columnWidths={columnWidths} // Pass columnWidths prop here
+            />
+          );
+        })}
       </tbody>
     </table>
   );
