@@ -21,6 +21,23 @@ const App = () => {
     }
   };
 
+  const deleteFile = async (file) => {
+    try {
+      const response = await fetch(`http://localhost:3001/uploads/${file.id}`, {
+        method: "DELETE",
+      });
+  
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+  
+      // Remove the deleted file from the data state
+      setData((prevData) => prevData.filter((item) => item.id !== file.id));
+    } catch (error) {
+      console.error("Error deleting file:", error);
+    }
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -66,6 +83,8 @@ const App = () => {
                 );
               }}
               columnWidths={[200, 200, 100]}
+              onDeleteClick={deleteFile}
+
             />
           </div>
         </main>

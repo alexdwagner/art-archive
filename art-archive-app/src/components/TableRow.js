@@ -1,23 +1,26 @@
-import React from 'react';
+import React from "react";
 
-const TableRow = ({ file, onFileClick, columnWidths }) => {
-
-  const handleClick = () => {
-    console.log("File data in TableRow onClick:", file);
-    onFileClick(file);
-  };
-
+// TableRow.js
+const TableRow = ({
+  file,
+  onFileClick,
+  onDeleteClick,
+  columnWidths
+}) => {
+  const { name, size, type, createdAt, tags } = file;
   return (
-    <tr
-      className="file-table-row"
-      onClick={handleClick} // Use the handleClick function here
-    >
-      <td style={{ width: columnWidths[0] }}>{file.name}</td>
-      <td style={{ width: columnWidths[1] }}>{file.type}</td>
-      <td style={{ width: columnWidths[2] }}>{file.size} bytes</td>
+    <tr>
+      <td onClick={() => onFileClick(file)}>{name}</td>
+      <td>{size}</td>
+      <td>{type}</td>
+      <td>{createdAt}</td>
+      <td>{tags}</td>
+      <td>
+        <button onClick={() => onDeleteClick(file)}>Delete</button>
+      </td>
     </tr>
   );
 };
 
-export default TableRow;
 
+export default TableRow;

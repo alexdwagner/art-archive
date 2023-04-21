@@ -3,11 +3,8 @@ import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
 import TableActions from "./TableActions";
 
-const FileTable = ({ data, onFileClick, columnWidths }) => {
-  console.log("Received props:", { data, onFileClick, columnWidths });
-
+const FileTable = ({ data, onFileClick, onDeleteClick, columnWidths }) => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "" });
-  const [selectedRows, setSelectedRows] = useState([]);
 
   const handleSort = (key) => {
     let direction = "ascending";
@@ -15,10 +12,6 @@ const FileTable = ({ data, onFileClick, columnWidths }) => {
       direction = "descending";
     }
     setSortConfig({ key, direction });
-  };
-
-  const handleDelete = (name) => {
-    setSelectedRows((prevState) => prevState.filter((row) => row.name !== name));
   };
 
   if (!data || data.length === 0) {
@@ -48,16 +41,12 @@ const FileTable = ({ data, onFileClick, columnWidths }) => {
     return 0;
   });
 
-  console.log("sortedData:", sortedData);
-
   return (
     <table>
       <colgroup>
-        <col style={{ width: `${columnWidths[0]}px` }} />
-        <col style={{ width: `${columnWidths[1]}px` }} />
-        <col style={{ width: `${columnWidths[2]}px` }} />
-        <col style={{ width: `${columnWidths[3]}px` }} />
-        <col style={{ width: `${columnWidths[4]}px` }} />
+        {columnWidths.map((width, index) => (
+          <col key={index} style={{ width: `${width}px` }} />
+        ))}
       </colgroup>
       <TableHeader
         handleSort={handleSort}
@@ -65,29 +54,31 @@ const FileTable = ({ data, onFileClick, columnWidths }) => {
         columnWidths={columnWidths}
       />
       <tbody>
-        {sortedData.map((item, index) => {
-          if (!item) {
-            console.warn('Undefined data item found in sortedData:', item);
-            item = {}; // Provide an empty object as a fallback
-          }
-          const tags = item.tags?.join(', ');
-          const createdAt = item.createdAt
-            ? new Date(item.createdAt).toLocaleString()
-            : '';
-          const size = item.size ? item.size.toLocaleString() : '';
-          return (
-            <TableRow
-              key={item.name}
-              file={{ ...item, tags, createdAt, size }}
-              onFileClick={onFileClick}
-              handleDelete={() => handleDelete(item.name)} // pass handleDelete as a prop
-              columnWidths={columnWidths} // Pass columnWidths prop here
-            />
-          );
-        })}
+      // FileTable.js
+{sortedData.map((item, index) => {
+  if (!item) {
+    console.warn('Undefined data item found in sortedData:', item);
+    item = {}; // Provide an empty object as a fallback
+  }
+  const tags = item.tags?.join(', ');
+  const createdAt = item.createdAt
+    ? new Date(item.createdAt).toLocaleString()
+    : '';
+  const size = item.size ? item.size.toLocaleString() : '';
+  return (
+    <TableRow
+      key={item._id} // Use item.id as the key
+      file={{ ...item, tags, createdAt, size }}
+      onFileClick={onFileClick}
+      onDeleteClick={onDeleteClick} // pass onDeleteClick as a prop
+      columnWidths={columnWidths} // Pass columnWidths prop here
+    />
+  );
+})}
+
       </tbody>
     </table>
   );
-      };
+};
 
-      export default FileTable;
+export default FileTable;
