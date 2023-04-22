@@ -23,7 +23,7 @@ const App = () => {
 
   const deleteFile = async (file) => {
     try {
-      const response = await fetch(`http://localhost:3001/uploads/${file.id}`, {
+      const response = await fetch(`http://localhost:3001/uploads/${file.name}`, {
         method: "DELETE",
       });
   
@@ -37,6 +37,7 @@ const App = () => {
       console.error("Error deleting file:", error);
     }
   };
+  
 
   useEffect(() => {
     fetchData();

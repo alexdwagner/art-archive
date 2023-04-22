@@ -54,7 +54,7 @@ const FileTable = ({ data, onFileClick, onDeleteClick, columnWidths }) => {
         columnWidths={columnWidths}
       />
       <tbody>
-        {sortedData.map((item) => {
+        {sortedData.map((item, index) => {
           if (!item) {
             console.warn("Undefined data item found in sortedData:", item);
             item = {}; // Provide an empty object as a fallback
@@ -66,7 +66,7 @@ const FileTable = ({ data, onFileClick, onDeleteClick, columnWidths }) => {
           const size = item.size ? item.size.toLocaleString() : "";
           return (
             <TableRow
-              key={`row-${item.id}`} // Use unique key with row prefix
+              key={item.id ? `row-${item.id}` : `row-${index}`} // Use unique key based on item.id or index
               file={{ ...item, tags, createdAt, size }}
               onFileClick={onFileClick}
               onDeleteClick={onDeleteClick} // pass onDeleteClick as a prop

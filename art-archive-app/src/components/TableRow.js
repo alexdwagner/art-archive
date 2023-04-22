@@ -17,14 +17,14 @@ const TableRow = ({
   } = file;
 
   return (
-    <tr key={id}>
+    <tr>
       <td onClick={() => onFileClick(file)}>{name}</td>
       <td>{size}</td>
       <td>{type}</td>
       <td>{createdAt}</td>
       <td>{tags}</td>
       <td>
-        <button onClick={() => onDeleteClick(id)}>Delete</button>
+      <button onClick={() => onDeleteClick(file)}>Delete</button>
       </td>
     </tr>
   );

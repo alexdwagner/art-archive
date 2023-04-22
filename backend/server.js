@@ -62,12 +62,13 @@ app.get("/uploads", (req, res) => {
       return;
     }
 
-    const fileList = files.map((file) => {
+    const fileList = files.map((file, index) => {
       const filePath = path.join(uploadsDir, file);
       const stats = fs.statSync(filePath);
       const fileExtension = path.extname(file).slice(1);
 
       return {
+        id: index, // Add unique identifier using the file's index in the array
         name: file,
         url: `http://localhost:3001/uploads/${file}`,
         size: stats.size,
@@ -78,6 +79,21 @@ app.get("/uploads", (req, res) => {
 
     res.set('Content-Type', 'application/json');
     res.json(fileList);
+  });
+});
+
+app.delete("/uploads/:id", (req, res) => {
+  const fileName = req.params.id;
+  const filePath = path.join(__dirname, "uploads", fileName);
+
+  fs.unlink(filePath, (err) => {
+    if (err) {
+      console.error("Error deleting file:", err);
+      res.status(500).send("Error deleting file");
+      return;
+    }
+
+    res.status(200).send("File deleted successfully");
   });
 });
 
