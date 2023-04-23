@@ -2,7 +2,10 @@ import React from "react";
 import ImagePreview from "./ImagePreview";
 import AudioPreview from "./AudioPreview";
 
+
 const FilePreview = ({ file }) => {
+  console.log("File object in FilePreview:", file);
+
   if (!file) {
     return <div>No files to preview</div>;
   }
