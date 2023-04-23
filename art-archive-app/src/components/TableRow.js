@@ -30,7 +30,7 @@ function TableRow({ file, onFileClick, onDeleteClick, columnWidths }) {
     return fileType && fileType.startsWith("audio/");
   };
 
-  console.log("File:", file); // Add this line to log the file information
+  // console.log("File:", file); // Add this line to log the file information
 
   return (
     <>

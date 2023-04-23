@@ -3,7 +3,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import FileTable from "./components/FileTable";
 import FileUploadForm from "./components/FileUploadForm";
 import AudioPreview from "./components/AudioPreview";
-import FilePreview from "./components/FilePreview";
+import ImagePreview from "./components/ImagePreview";
 import {
   Modal,
   ModalOverlay,
@@ -40,7 +40,6 @@ const App = () => {
         throw new Error("Network response was not ok");
       }
 
-      // Remove the deleted file from the data state
       setData((prevData) => prevData.filter((item) => item.id !== file.id));
     } catch (error) {
       console.error("Error deleting file:", error);
@@ -51,29 +50,9 @@ const App = () => {
     fetchData();
   }, []);
 
-  const fetchFileBlob = async (url) => {
-    console.log("Fetching file:", url);
-    try {
-      const response = await fetch(url);
-      console.log("Response status:", response.status);
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return await response.blob();
-    } catch (error) {
-      console.error("Error fetching file blob:", error);
-    }
-  };
-
-  console.log("Data being passed to FileTable:", data);
-
-  const handleRowDoubleClick = (file) => {
+  const openFileCard = (file) => {
     setSelectedFile(file);
     setIsFileCardOpen(true);
-  };
-
-  const closeFileCard = () => {
-    setIsFileCardOpen(false);
   };
 
   return (
@@ -83,25 +62,22 @@ const App = () => {
           <h1>Art Archive</h1>
         </header>
         <main className="main">
-        {selectedFile && (
-  <FilePreview file={selectedFile} />
-)}
+          {selectedFile && selectedFile.type.startsWith("audio") ? (
+            <AudioPreview file={selectedFile} />
+          ) : (
+            selectedFile && selectedFile.type.startsWith("image") && <ImagePreview file={selectedFile} />
+          )}
 
           <div className="form-and-table">
             <FileUploadForm updateData={fetchData} />
             <FileTable
               data={data}
-              onFileClick={async (file) => {
-                console.log("File data in onFileClick:", file);
-                const blob = await fetchFileBlob(file.url);
-                console.log("Blob data:", blob);
-                setSelectedFile(
-                  new File([blob], file.name, { type: blob.type })
-                );
+              onFileClick={(file) => {
+                setSelectedFile(file);
               }}
-              columnWidths={[200, 200, 100]}
+              columnWidths={[200, 200, 100, 100]}
               onDeleteClick={deleteFile}
-              onRowDoubleClick={handleRowDoubleClick}
+              onInfoClick={openFileCard} // Use the new openFileCard function for the "More Info" link
             />
           </div>
         </main>
@@ -109,10 +85,9 @@ const App = () => {
           <p>&copy; 2023 Art Archive. All rights reserved.</p>
         </footer>
       </div>
-  
-      {/* File card modal */}
+
       {selectedFile && (
-        <Modal isOpen={isFileCardOpen} onClose={closeFileCard}>
+        <Modal isOpen={isFileCardOpen} onClose={() => setIsFileCardOpen(false)}>
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>File Metadata</ModalHeader>
@@ -128,6 +103,6 @@ const App = () => {
       )}
     </ErrorBoundary>
   );
-      }
-      
-      export default App;
+};
+
+export default App;

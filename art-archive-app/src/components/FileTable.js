@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
 import TableActions from "./TableActions";
-import { Text } from '@chakra-ui/react';
-
+import { Text } from "@chakra-ui/react";
 
 import {
   Modal,
@@ -14,7 +13,7 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 
-function FileTable({ data, onFileClick, onDeleteClick, columnWidths, onRowDoubleClick }) {
+function FileTable({ data, onFileClick, onDeleteClick, columnWidths, onInfoClick }) {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "" });
   const [selectedFile, setSelectedFile] = useState(null);
 
@@ -28,6 +27,7 @@ function FileTable({ data, onFileClick, onDeleteClick, columnWidths, onRowDouble
 
   const openFileCard = (file) => {
     setSelectedFile(file);
+    onInfoClick(file);
   };
 
   const closeFileCard = () => {
@@ -92,32 +92,31 @@ function FileTable({ data, onFileClick, onDeleteClick, columnWidths, onRowDouble
                 onFileClick={onFileClick}
                 onDeleteClick={onDeleteClick} // pass onDeleteClick as a prop
                 columnWidths={columnWidths} // Pass columnWidths prop here
-                onRowDoubleClick={() => onRowDoubleClick(item)} // Pass the selected item
-                />
+                onInfoClick={() => openFileCard(item)} // Pass the openFileCard function
+              />
             );
           })}
         </tbody>
       </table>
-
-        {/* File card modal */}
-    {selectedFile && (
-      <Modal isOpen onClose={closeFileCard}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>File Metadata</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Text>Name: {selectedFile.name}</Text>
-            <Text>URL: {selectedFile.url}</Text>
-            <Text>Size: {selectedFile.size} bytes</Text>
-            <Text>Type: {selectedFile.type}</Text>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-    )}
-  </>
-);
-
-    }
-
-    export default FileTable;
+  
+      {/* File card modal */}
+      {selectedFile && (
+        <Modal isOpen onClose={closeFileCard}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>File Metadata</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Text>Name: {selectedFile.name}</Text>
+              <Text>URL: {selectedFile.url}</Text>
+              <Text>Size: {selectedFile.size} bytes</Text>
+              <Text>Type: {selectedFile.type}</Text>
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      )}
+    </>
+  );
+      }
+      
+      export default FileTable;
