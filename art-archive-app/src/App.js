@@ -4,12 +4,15 @@ import FileTable from "./components/FileTable";
 import FileUploadForm from "./components/FileUploadForm";
 import AudioPreview from "./components/AudioPreview";
 import FilePreview from "./components/FilePreview"; // Import FilePreview component
+import SearchBar from "./components/SearchBar";
+
 import "./Itunes.css";
 import "./styles.css";
 
 const App = () => {
   const [data, setData] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const fetchData = async () => {
     try {
@@ -72,9 +75,13 @@ const App = () => {
             <FilePreview file={selectedFile} />
           )}
           <div className="form-and-table">
+            
             <FileUploadForm updateData={fetchData} />
+            <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
             <FileTable
-              data={data}
+              data={data.filter(file =>
+                file.name.toLowerCase().includes(searchQuery.toLowerCase())
+              )}
               onFileClick={async (file) => {
                 console.log("File data in onFileClick:", file);
                 const blob = await fetchFileBlob(file.url);
