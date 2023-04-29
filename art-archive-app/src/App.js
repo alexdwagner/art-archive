@@ -6,9 +6,6 @@ import AudioPreview from "./components/AudioPreview";
 import FilePreview from "./components/FilePreview"; // Import FilePreview component
 import SearchBar from "./components/SearchBar";
 
-import "./Itunes.css";
-import "./styles.css";
-
 const App = () => {
   const [data, setData] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);

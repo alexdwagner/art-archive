@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
 import TableActions from "./TableActions";
+import { formatBytes } from '../utils';
+import "../styles/FileTable.css";
 
 const FileTable = ({ data, onFileClick, onDeleteClick, columnWidths }) => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "" });
@@ -22,6 +24,8 @@ const FileTable = ({ data, onFileClick, onDeleteClick, columnWidths }) => {
     );
   }
 
+
+  
   const definedData = data.filter((item) => {
     if (!item) {
       console.warn("Undefined data item found:", item);
@@ -63,7 +67,8 @@ const FileTable = ({ data, onFileClick, onDeleteClick, columnWidths }) => {
           const createdAt = item.createdAt
             ? new Date(item.createdAt).toLocaleString()
             : "";
-          const size = item.size ? item.size.toLocaleString() : "";
+          const size = item.size ? formatBytes(item.size) : "";
+
           return (
             <TableRow
               key={item.id ? `row-${item.id}` : `row-${index}`} // Use unique key based on item.id or index

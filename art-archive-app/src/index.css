@@ -1,3 +1,326 @@
+/* index.css */
+
+/* Define some variables for colors and fonts */ :root { –primary-color: #007bff; –secondary-color: #f4f4f4; –text-color: #333; –font-family: Arial, sans-serif; }
+
+/* Reset some default styles */
+
+{ box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(–font-family); line-height: 1.6; color: var(–text-color); }
+
+code { font-family: source-code-pro, Menlo, Monaco, Consolas, ‘Courier New’, monospace; }
+
+/* Add styles for the search bar */ .search-bar { margin-top: 20px; }
+
+.search-input { width: 100%; padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; background-color: #f8f8f8; }
+
+/* Use flexbox to create a responsive layout */ .App { max-width: 1200px; margin: 0 auto; }
+
+header, footer { text-align: center; padding: 1rem; }
+
+header h1 { font-size: 2rem; }
+
+.main { display: flex; flex-wrap: wrap; /* Allow the elements to wrap on smaller screens / justify-content: center; / Center the elements horizontally / align-items: flex-start; / Align the elements to the top vertically */ }
+
+.form-and-table, .preview-container { flex-basis: calc(50% - 2rem); /* Set the width of the elements to half of the container minus some gap */ }
+
+.form-and-table { display: flex; flex-direction: column; /* Stack the form and table vertically */ }
+
+table { width: 100%; border-collapse: collapse; }
+
+table th, table td { border: 1px solid #ccc; padding: 0.5rem; }
+
+table th { background: var(–secondary-color); }
+
+Okay, here is the rest of the code:
+
+.file-link {
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.file-link:focus,
+.file-link:hover {
+  color: #0056b3;
+}
+
+.thumbnail {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.preview-container {
+  height: 300px;
+  overflow: auto;
+  margin-bottom: 30px;
+  position: relative; /* Set the position to relative for the absolute positioned child */
+}
+
+.react-resizable {
+  position: relative;
+}
+
+.FilePreview {
+  max-width: 100%;
+  max-height: 100%;
+  position: absolute; /* Set the position to absolute to center the element */
+  top: 50%; /* Move the element to the center vertically */
+  left: 50%; /* Move the element to the center horizontally */
+  transform: translate(-50%, -50%); /* Offset the element by half of its width and height */
+}
+
+.FilePreview img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* Add some transitions and transforms for some interactivity */
+.file-link:hover .thumbnail {
+  transform: scale(1.1); /* Scale up the thumbnail on hover */
+}
+
+.FilePreview:hover {
+  transform: translate(-50%, -50%) rotate(10deg); /* Rotate the preview on hover */
+}
+
+/* Use media queries to adjust the layout for smaller screens */
+@media (max-width: 768px) {
+  .main {
+    flex-direction: column; /* Stack the elements vertically */
+    align-items: center; /* Center the elements horizontally */
+    gap: 1rem; /* Reduce the gap between elements */
+  }
+
+  .form-and-table,
+  .preview-container {
+    flex-basis: auto; /* Remove the fixed width of the elements */
+    width: 90%; /* Set the width to a percentage of the container */
+    max-width: none; /* Remove the max-width constraint */
+    margin-left: auto; /* Center the elements horizontally */
+    margin-right: auto;
+    margin-bottom: none; /* Remove the bottom margin of preview container */
+    margin-top:none; /* Remove the top margin of form and table */
+    
+  
+  }
+}
+
+body {
+  font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", sans-serif;
+  background-color: #f3f3f3;
+  color: #333;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+header {
+  width: 100%;
+  background-color: #333;
+  padding: 20px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+  color: #fff;
+  font-size: 24px;
+  margin: 0;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 30px;
+}
+
+.form-and-table {
+  display: flex;
+  flex-direction: column;
+}
+
+form {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+input[type="file"] {
+  border: 1px solid #ccc;
+  background-color: #fff;
+  padding: 5px;
+  border-radius: 3px;
+}
+
+button {
+  background-color: #0070e0;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  padding: 5px 15px;
+  font-size: 14px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  background-color: #fff;
+}
+
+th {
+  text-align: left;
+  font-weight: bold;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+td {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+tr:hover {
+  background-color: #f3f3f3;
+}
+
+footer {
+  width: 100%;
+  background-color: #333;
+  padding: 20px;
+  box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1);
+  margin-top: 30px;
+}
+
+footer p {
+  color: #fff;
+  font-size: 14px;
+  margin: 0;
+}
+
+.preview-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 400px;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+
+
+.preview-container img,
+.preview-container video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.audio-player-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.audio-player {
+  width: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Add styles for the search bar */
+.search-bar {
+  margin-top: 20px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+}
+
+.react-resizable {
+  position: relative;
+  box-sizing: border-box;
+  display: inline-block;
+}
+
+.react-resizable-handle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  z-index: 1;
+}
+
+.react-resizable-handle-se {
+  bottom: 0;
+  right: 0;
+  cursor: se-resize;
+  background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22 viewBox%3D%220 0 10 10%22%3E%3Cpath fill%3D%22%23333%22 d%3D%22M9 9H1V1h8v8zm-1-1V2H2v6h6z%22%2F%3E%3C%2Fsvg%3E');
+}
+
+.react-resizable-handle-sw {
+  bottom: 0;
+  left: 0;
+  cursor: sw-resize;
+  background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22 viewBox%3D%220 0 10 10%22%3E%3Cpath fill%3D%22%23333%22 d%3D%22M1 9h8V1H1v8zm1-1v-6h6v6H2z%22%2F%3E%3C%2Fsvg%3E');
+}
+
+.react-resizable-handle-ne {
+  top: 0;
+  right: 0;
+  cursor: ne-resize;
+  background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22 viewBox%3D%220 0 10 10%22%3E%3Cpath fill%3D%22%23333%22 d%3D%22M1 1h8v8H1V1zm1 1v6h6V2H2z%22%2F%3E%3C%2Fsvg%3E');
+}
+
+.react-resizable-handle-nw {
+  top: 0;
+  left: 0;
+  cursor: nw-resize;
+  background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22 viewBox%3D%220 0 10 10%22%3E%3Cpath fill%3D%22%23333%22 d%3D%22M9 1H1v8h8V1zm-1 6H2V2h6v5z%22%2F%3');
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

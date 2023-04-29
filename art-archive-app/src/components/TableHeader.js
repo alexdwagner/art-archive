@@ -11,7 +11,7 @@ const TableHeader = ({ handleSort, sortConfig, columnWidths }) => {
   return (
     <thead>
       <tr>
-        {['name', 'type', 'size', 'createdAt', 'tags'].map((key, index) => (
+        {['name', 'size', 'type', 'createdAt', 'tags'].map((key, index) => (
           <th
             key={key}
             onClick={() => handleSort(key)}

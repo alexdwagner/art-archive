@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import WaveSurfer from "wavesurfer.js";
-import "./AudioPreview.css";
+import "../styles/AudioPreview.css";
 
 const AudioPreview = ({ file }) => {
   const waveformRef = useRef(null);
