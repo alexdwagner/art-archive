@@ -1,6 +1,6 @@
 import React from "react";
 
-const TableActions = ({ selectedFiles, handleDelete }) => {
+const TableActions = ({ selectedFiles = [], handleDelete }) => {
   return (
     <div className="table-actions">
       {selectedFiles.length > 0 && (

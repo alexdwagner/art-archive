@@ -3,13 +3,16 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import FileTable from "./components/FileTable";
 import FileUploadForm from "./components/FileUploadForm";
 import AudioPreview from "./components/AudioPreview";
-import FilePreview from "./components/FilePreview"; // Import FilePreview component
+import FilePreview from "./components/FilePreview";
 import SearchBar from "./components/SearchBar";
 
 const App = () => {
   const [data, setData] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+
+  console.log("setData value: ", setData);
+  console.log("setData type: ", typeof setData);
 
   const fetchData = async () => {
     try {
@@ -20,6 +23,14 @@ const App = () => {
       console.error("Error fetching file list:", error);
     }
   };
+
+  console.log("Data before fetch:", data);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  console.log("Data after fetch:", data);
 
   const deleteFile = async (file) => {
     try {
@@ -37,11 +48,6 @@ const App = () => {
       console.error("Error deleting file:", error);
     }
   };
-  
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   const fetchFileBlob = async (url) => {
     console.log("Fetching file:", url);
@@ -72,7 +78,6 @@ const App = () => {
             <FilePreview file={selectedFile} />
           )}
           <div className="form-and-table">
-            
             <FileUploadForm updateData={fetchData} />
             <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
             <FileTable
@@ -89,7 +94,6 @@ const App = () => {
               }}
               columnWidths={[200, 200, 100]}
               onDeleteClick={deleteFile}
-
             />
           </div>
         </main>

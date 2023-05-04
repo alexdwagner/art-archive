@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import TableHeader from "./TableHeader";
-import TableRow from "./TableRow";
 import TableActions from "./TableActions";
-import { formatBytes } from '../utils';
+import { formatBytes } from "../utils";
 import "../styles/FileTable.css";
+import EditableCell from "./EditableCell";
 
-const FileTable = ({ data, onFileClick, onDeleteClick, columnWidths }) => {
+const FileTable = ({ data, setData, onFileClick, onDeleteClick, columnWidths }) => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "" });
 
   const handleSort = (key) => {
@@ -16,6 +16,12 @@ const FileTable = ({ data, onFileClick, onDeleteClick, columnWidths }) => {
     setSortConfig({ key, direction });
   };
 
+  const updateFileName = (index, newName) => {
+    const updatedData = [...data];
+    updatedData[index].name = newName;
+    setData(updatedData);
+  };
+
   if (!data || data.length === 0) {
     return (
       <div>
@@ -24,17 +30,7 @@ const FileTable = ({ data, onFileClick, onDeleteClick, columnWidths }) => {
     );
   }
 
-
-  
-  const definedData = data.filter((item) => {
-    if (!item) {
-      console.warn("Undefined data item found:", item);
-      return false;
-    }
-    return item.hasOwnProperty("name");
-  });
-
-  const sortedData = [...definedData].sort((a, b) => {
+  const sortedData = [...data].sort((a, b) => {
     if (sortConfig.key === null) return 0;
     if (a[sortConfig.key] < b[sortConfig.key]) {
       return sortConfig.direction === "ascending" ? -1 : 1;
@@ -58,25 +54,30 @@ const FileTable = ({ data, onFileClick, onDeleteClick, columnWidths }) => {
         columnWidths={columnWidths}
       />
       <tbody>
-        {sortedData.map((item, index) => {
-          if (!item) {
-            console.warn("Undefined data item found in sortedData:", item);
-            item = {}; // Provide an empty object as a fallback
-          }
-          const tags = item.tags?.join(", ");
-          const createdAt = item.createdAt
-            ? new Date(item.createdAt).toLocaleString()
+        {sortedData.map((file, index) => {
+          const tags = file.tags?.join(", ");
+          const createdAt = file.createdAt
+            ? new Date(file.createdAt).toLocaleString()
             : "";
-          const size = item.size ? formatBytes(item.size) : "";
+          const size = file.size ? formatBytes(file.size) : "";
 
           return (
-            <TableRow
-              key={item.id ? `row-${item.id}` : `row-${index}`} // Use unique key based on item.id or index
-              file={{ ...item, tags, createdAt, size }}
-              onFileClick={onFileClick}
-              onDeleteClick={onDeleteClick} // pass onDeleteClick as a prop
-              columnWidths={columnWidths} // Pass columnWidths prop here
-            />
+            <tr key={file.id ? `row-${file.id}` : `row-${index}`}>
+              <EditableCell
+                value={file.name}
+                onUpdate={(newName) => updateFileName(index, newName)}
+              />
+              <td>{tags}</td>
+              <td>{createdAt}</td>
+              <td>{size}</td>
+              <td>
+                <TableActions
+                  file={file}
+                  onFileClick={onFileClick}
+                  onDeleteClick={onDeleteClick}
+                />
+              </td>
+            </tr>
           );
         })}
       </tbody>
@@ -85,3 +86,4 @@ const FileTable = ({ data, onFileClick, onDeleteClick, columnWidths }) => {
 };
 
 export default FileTable;
+gi
