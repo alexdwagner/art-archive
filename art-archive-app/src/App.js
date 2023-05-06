@@ -11,6 +11,7 @@ const App = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
+
   console.log("setData value: ", setData);
   console.log("setData type: ", typeof setData);
 
@@ -18,11 +19,13 @@ const App = () => {
     try {
       const response = await fetch("http://localhost:3001/uploads/");
       const data = await response.json();
+      console.log("Fetched data:", data); // Add this line
       setData(data);
     } catch (error) {
       console.error("Error fetching file list:", error);
     }
   };
+  
 
   console.log("Data before fetch:", data);
 
@@ -82,7 +85,8 @@ const App = () => {
             <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
             <FileTable
               data={data.filter(file =>
-                file.name.toLowerCase().includes(searchQuery.toLowerCase())
+                file.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                (file.tags && file.tags.toLowerCase().includes(searchQuery.toLowerCase()))
               )}
               onFileClick={async (file) => {
                 console.log("File data in onFileClick:", file);
@@ -92,8 +96,31 @@ const App = () => {
                   new File([blob], file.name, { type: blob.type })
                 );
               }}
-              columnWidths={[200, 200, 100]}
               onDeleteClick={deleteFile}
+              onUpdate={async (id, newName, newTags) => {
+                try {
+                  const response = await fetch(`http://localhost:3001/uploads/${id}`, {
+                    method: "PATCH",
+                    headers: {
+                      "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ newName, newTags })
+                  });
+  
+                  if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                  }
+  
+                  // Update the file data in the state
+                  setData((prevData) =>
+                    prevData.map((item) =>
+                      item.id === id ? { ...item, name: newName, tags: newTags } : item
+                    )
+                  );
+                } catch (error) {
+                  console.error("Error updating file:", error);
+                }
+              }}
             />
           </div>
         </main>
@@ -103,6 +130,6 @@ const App = () => {
       </div>
     </ErrorBoundary>
   );
-};
+            }  
 
 export default App;
