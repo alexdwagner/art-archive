@@ -5,6 +5,21 @@ const morgan = require("morgan");
 const fs = require('fs');
 const path = require("path");
 const ffmpeg = require('fluent-ffmpeg');
+const FILE_DB_PATH = "./filedb.json";
+
+// Read the filedb.json content and parse it to a JavaScript array
+const readFilesData = () => {
+  try {
+    const fileContent = fs.readFileSync(FILE_DB_PATH, "utf-8");
+    return JSON.parse(fileContent);
+  } catch (error) {
+    console.error("Error reading file database:", error);
+    return [];
+  }
+};
+
+// Initialize the files array with the data read from filedb.json
+let files = readFilesData();
 
 const app = express();
 
@@ -97,40 +112,34 @@ app.delete("/uploads/:id", (req, res) => {
   });
 });
 
+if (fs.existsSync(FILE_DB_PATH)) {
+  const fileData = fs.readFileSync(FILE_DB_PATH, "utf8");
+  files = JSON.parse(fileData);
+}
+
 app.patch("/uploads/:id", (req, res) => {
-  const id = parseInt(req.params.id, 10);
-  const { newName, newTags } = req.body;
+  const { id } = req.params;
+  const updatedFile = req.body;
 
-  const uploadsDir = path.join(__dirname, "uploads");
-  fs.readdir(uploadsDir, (err, files) => {
-    if (err) {
-      console.error("Error reading files:", err);
-      res.status(500).send("Error reading files");
-      return;
-    }
+  // Find the index of the file with the matching ID
+  const fileIndex = files.findIndex((file) => file.id === id);
 
-    if (id < 0 || id >= files.length) {
-      res.status(404).send("File not found");
-      return;
-    }
+  // If the file is not found, return a 404 error
+  if (fileIndex === -1) {
+    res.status(404).send("File not found");
+    return;
+  }
 
-    const oldName = files[id];
-    const fileExtension = path.extname(oldName);
-    const newFileName = `${newName}${fileExtension}`;
-    const oldPath = path.join(uploadsDir, oldName);
-    const newPath = path.join(uploadsDir, newFileName);
+  // Update the file's information in the files array
+  files[fileIndex] = updatedFile;
 
-    fs.rename(oldPath, newPath, (err) => {
-      if (err) {
-        console.error("Error renaming file:", err);
-        res.status(500).send("Error renaming file");
-        return;
-      }
+  // Save the updated files array to disk
+  fs.writeFileSync(FILE_DB_PATH, JSON.stringify(files));
 
-      res.status(200).send("File updated successfully");
-    });
-  });
+  // Send a success response
+  res.status(200).send("File updated successfully");
 });
+
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {

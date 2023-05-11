@@ -56,7 +56,15 @@ const App = () => {
     }
   };
 
-  const onUpdate = async (id, updatedFile) => {
+  const onUpdate = async (id, newTags) => {
+    const originalFile = data.find((file) => file.id === id);
+    if (!originalFile) {
+      console.error("File not found:", id);
+      return;
+    }
+  
+    const updatedFile = { ...originalFile, tags: newTags };
+  
     try {
       const response = await fetch(`${API_URL}/uploads/${id}`, {
         method: "PATCH",
@@ -65,11 +73,11 @@ const App = () => {
         },
         body: JSON.stringify(updatedFile),
       });
-
+  
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-
+  
       setData((prevData) =>
         prevData.map((item) => (item.id === id ? updatedFile : item))
       );
@@ -77,6 +85,7 @@ const App = () => {
       console.error("Error updating file:", error);
     }
   };
+  
 
   return (
     <ErrorBoundary>
