@@ -88,6 +88,6 @@ const Tags = ({ tags = [], onUpdate }) => {
       )}
     </div>
   );
-};
+}; 
 
 export default Tags;
