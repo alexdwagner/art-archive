@@ -1,0 +1,24 @@
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .tag {
+    background-color: #007bff;
+    color: white;
+    border-radius: 3px;
+    padding: 2px 8px;
+    margin: 2px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .tag-name {
+    margin-right: 4px;
+  }
+  
+  .remove-tag {
+    cursor: pointer;
+    font-size: 14px;
+  }
+  

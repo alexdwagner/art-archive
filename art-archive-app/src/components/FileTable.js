@@ -1,6 +1,7 @@
 import React from "react";
 import TableRow from "./TableRow";
 
+
 const FileTable = ({
   data = [], // Add a default value for data
   onFileClick,

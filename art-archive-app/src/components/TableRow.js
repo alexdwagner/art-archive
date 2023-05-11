@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { formatBytes } from "../utils";
 import Tags from "./Tags";
+import ErrorBoundary from './ErrorBoundary';
+
 
 const TableRow = ({ file, onFileClick, onDeleteClick, onUpdate }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -20,8 +22,8 @@ const TableRow = ({ file, onFileClick, onDeleteClick, onUpdate }) => {
   };
 
   const handleTagsUpdate = (newTags) => {
-    onUpdate({ ...file, tags: newTags });
-  };
+    onUpdate(file.id, { ...file, tags: newTags });
+  };  
 
   return (
     <tr>
@@ -42,7 +44,9 @@ const TableRow = ({ file, onFileClick, onDeleteClick, onUpdate }) => {
       <td>{file.type}</td>
       <td>{file.createdAt}</td>
       <td>
+        <ErrorBoundary>
         <Tags tags={file.tags} onUpdate={handleTagsUpdate} />
+        </ErrorBoundary>
       </td>
       <td>
         <button onClick={() => onDeleteClick(file)}>Delete</button>

@@ -18,7 +18,7 @@ app.use("/uploads", (req, res, next) => {
 }, express.static(path.join(__dirname, "uploads")));
 
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
-
+app.use(express.json()); // Add this line to parse JSON in request body
 app.use(morgan("dev"));
 
 const storage = multer.diskStorage({
@@ -94,6 +94,41 @@ app.delete("/uploads/:id", (req, res) => {
     }
 
     res.status(200).send("File deleted successfully");
+  });
+});
+
+app.patch("/uploads/:id", (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  const { newName, newTags } = req.body;
+
+  const uploadsDir = path.join(__dirname, "uploads");
+  fs.readdir(uploadsDir, (err, files) => {
+    if (err) {
+      console.error("Error reading files:", err);
+      res.status(500).send("Error reading files");
+      return;
+    }
+
+    if (id < 0 || id >= files.length) {
+      res.status(404).send("File not found");
+      return;
+    }
+
+    const oldName = files[id];
+    const fileExtension = path.extname(oldName);
+    const newFileName = `${newName}${fileExtension}`;
+    const oldPath = path.join(uploadsDir, oldName);
+    const newPath = path.join(uploadsDir, newFileName);
+
+    fs.rename(oldPath, newPath, (err) => {
+      if (err) {
+        console.error("Error renaming file:", err);
+        res.status(500).send("Error renaming file");
+        return;
+      }
+
+      res.status(200).send("File updated successfully");
+    });
   });
 });
 

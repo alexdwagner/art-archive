@@ -6,46 +6,37 @@ import AudioPreview from "./components/AudioPreview";
 import FilePreview from "./components/FilePreview";
 import SearchBar from "./components/SearchBar";
 
+const API_URL = "http://localhost:3001";
+
 const App = () => {
   const [data, setData] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-
-  console.log("setData value: ", setData);
-  console.log("setData type: ", typeof setData);
-
   const fetchData = async () => {
     try {
       const response = await fetch("http://localhost:3001/uploads/");
       const data = await response.json();
-      console.log("Fetched data:", data); // Add this line
       setData(data);
     } catch (error) {
       console.error("Error fetching file list:", error);
     }
   };
-  
-
-  console.log("Data before fetch:", data);
 
   useEffect(() => {
     fetchData();
   }, []);
-
-  console.log("Data after fetch:", data);
 
   const deleteFile = async (file) => {
     try {
       const response = await fetch(`http://localhost:3001/uploads/${file.name}`, {
         method: "DELETE",
       });
-  
+
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-  
-      // Remove the deleted file from the data state
+
       setData((prevData) => prevData.filter((item) => item.id !== file.id));
     } catch (error) {
       console.error("Error deleting file:", error);
@@ -53,10 +44,9 @@ const App = () => {
   };
 
   const fetchFileBlob = async (url) => {
-    console.log("Fetching file:", url);
     try {
       const response = await fetch(url);
-      console.log("Response status:", response.status);
+
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -66,7 +56,27 @@ const App = () => {
     }
   };
 
-  console.log("Data being passed to FileTable:", data);
+  const onUpdate = async (id, updatedFile) => {
+    try {
+      const response = await fetch(`${API_URL}/uploads/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedFile),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      setData((prevData) =>
+        prevData.map((item) => (item.id === id ? updatedFile : item))
+      );
+    } catch (error) {
+      console.error("Error updating file:", error);
+    }
+  };
 
   return (
     <ErrorBoundary>
@@ -84,38 +94,32 @@ const App = () => {
             <FileUploadForm updateData={fetchData} />
             <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
             <FileTable
-              data={data.filter(file =>
-                file.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                (file.tags && file.tags.toLowerCase().includes(searchQuery.toLowerCase()))
+              data={data.filter(
+                (file) =>
+                  file.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                  (file.tags && file.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase())))
               )}
               onFileClick={async (file) => {
-                console.log("File data in onFileClick:", file);
                 const blob = await fetchFileBlob(file.url);
-                console.log("Blob data:", blob);
-                setSelectedFile(
-                  new File([blob], file.name, { type: blob.type })
-                );
+                setSelectedFile(new File([blob], file.name, { type: blob.type }));
               }}
               onDeleteClick={deleteFile}
-              onUpdate={async (id, newName, newTags) => {
+              onUpdate={async (id, updatedFile) => {
                 try {
-                  const response = await fetch(`http://localhost:3001/uploads/${id}`, {
+                  const response = await fetch(`${API_URL}/uploads/${id}`, {
                     method: "PATCH",
                     headers: {
-                      "Content-Type": "application/json"
+                      "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ newName, newTags })
+                    body: JSON.stringify(updatedFile),
                   });
-  
+
                   if (!response.ok) {
                     throw new Error("Network response was not ok");
                   }
-  
-                  // Update the file data in the state
+
                   setData((prevData) =>
-                    prevData.map((item) =>
-                      item.id === id ? { ...item, name: newName, tags: newTags } : item
-                    )
+                    prevData.map((item) => (item.id === id ? updatedFile : item))
                   );
                 } catch (error) {
                   console.error("Error updating file:", error);
@@ -130,6 +134,6 @@ const App = () => {
       </div>
     </ErrorBoundary>
   );
-            }  
+};
 
 export default App;
