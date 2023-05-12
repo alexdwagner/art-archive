@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import '../styles/Tags.css';
 
-const Tags = ({ tags = [], onUpdate }) => {
+const Tags = ({ tags = [], fileId, onUpdate }) => {
   const [inputValue, setInputValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [isSuggesting, setIsSuggesting] = useState(false);
@@ -37,7 +37,8 @@ const Tags = ({ tags = [], onUpdate }) => {
     setInputValue("");
     setSuggestions([]);
     setIsSuggesting(false);
-    onUpdate([...tags, newTag]);
+    const newTags = [...tags, newTag];
+    onUpdate(fileId, { tags: newTags });
   };
 
   const handleSuggestionClick = (suggestedTag) => {
@@ -45,7 +46,8 @@ const Tags = ({ tags = [], onUpdate }) => {
   };
 
   const handleRemoveTag = (tagToRemove) => {
-    onUpdate(tags.filter((tag) => tag !== tagToRemove));
+    const newTags = tags.filter((tag) => tag !== tagToRemove);
+    onUpdate(fileId, { tags: newTags });
   };
 
   return (

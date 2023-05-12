@@ -45,8 +45,11 @@ const TableRow = ({ file, onFileClick, onDeleteClick, onUpdate }) => {
       <td>{file.createdAt}</td>
       <td>
         <ErrorBoundary>
-        <Tags tags={file.tags} onUpdate={handleTagsUpdate} />
-        </ErrorBoundary>
+        <Tags tags={file.tags} fileId={file.id} onUpdate={onUpdate} />
+
+
+
+</ErrorBoundary>
       </td>
       <td>
         <button onClick={() => onDeleteClick(file)}>Delete</button>
