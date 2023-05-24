@@ -6,6 +6,8 @@ const fs = require('fs');
 const path = require("path");
 const ffmpeg = require('fluent-ffmpeg');
 const FILE_DB_PATH = "./filedb.json";
+const File = require('./models/User');
+
 
 const readFilesData = () => {
   try {
