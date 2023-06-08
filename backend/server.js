@@ -1,3 +1,6 @@
+require('dotenv').config();
+
+const Sequelize = require('sequelize');
 const express = require("express");
 const multer = require("multer");
 const cors = require("cors");
@@ -8,6 +11,12 @@ const ffmpeg = require('fluent-ffmpeg');
 const FILE_DB_PATH = "./filedb.json";
 const File = require('./models/User');
 
+const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
+  host: process.env.DB_HOST,
+  dialect: process.env.DB_DIALECT
+});
+
+const User = require('./models/User')(sequelize, Sequelize.DataTypes);
 
 const readFilesData = () => {
   try {
