@@ -8,6 +8,7 @@ const morgan = require("morgan");
 const fs = require('fs');
 const path = require("path");
 const ffmpeg = require('fluent-ffmpeg');
+const { v4: uuidv4 } = require('uuid');
 const FILE_DB_PATH = "./filedb.json";
 const File = require('./models/User');
 
@@ -32,14 +33,12 @@ let files = readFilesData();
 
 const app = express();
 
-app.use("/uploads", (req, res, next) => {
-  console.log("Files array before PATCH: ", files);
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-  res.setHeader("Access-Control-Allow-Methods", "GET");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  next();
-}, express.static(path.join(__dirname, "uploads")));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+app.use(function (err, req, res, next) {
+  console.error(err.stack)
+  res.status(500).send('Something broke!')
+})
 
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(express.json());
@@ -57,53 +56,52 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 app.post('/upload', upload.single('file'), (req, res) => {
+  if (!req.file) {
+    res.status(400).send('No file was uploaded.');
+    return;
+  }
+  const file = {
+    id: uuidv4(), 
+    name: req.file.originalname,
+    path: req.file.path
+  };
+  
+  files.push(file);
+  fs.writeFileSync(FILE_DB_PATH, JSON.stringify(files));
+  
   res.status(200).send("File uploaded successfully.");
 });
 
-app.post('/convert', upload.single('file'), (req, res) => {
-  const inputPath = req.file.path;
-  const outputPath = `uploads/${Date.now()}-converted.mp4`;
-
-  ffmpeg(inputPath)
-    .output(outputPath)
-    .on('end', () => {
-      console.log('Conversion finished');
-      res.status(200).send('File converted successfully.');
-    })
-    .on('error', (err) => {
-      console.log('Error:', err.message);
-      res.status(500).send('Error converting file.');
-    })
-    .run();
-});
-
 app.get("/uploads", (req, res) => {
-  const uploadsDir = path.join(__dirname, "uploads");
-  fs.readdir(uploadsDir, (err, files) => {
-    if (err) {
-      console.error("Error reading files:", err);
-      res.status(500).send("Error reading files");
-      return;
-    }
+  try {
+    const uploadsDir = path.join(__dirname, "uploads");
+    const filesData = readFilesData();
 
-    const fileList = files.map((file, index) => {
-      const filePath = path.join(uploadsDir, file);
-      const stats = fs.statSync(filePath);
-      const fileExtension = path.extname(file).slice(1);
+    const fileList = filesData.map((fileData) => {
+      const filePath = path.join(uploadsDir, fileData.name);
+      try {
+        const stats = fs.statSync(filePath);
+        const fileExtension = path.extname(fileData.name).slice(1);
 
-      return {
-        id: index,
-        name: file,
-        url: `http://localhost:3001/uploads/${file}`,
-        size: stats.size,
-        type: fileExtension,
-        createdAt: stats.ctime,
-      };
-    });
+        return {
+          id: fileData.id,
+          name: fileData.name,
+          url: `http://localhost:3001/uploads/${fileData.name}`,
+          size: stats.size,
+          type: fileExtension,
+          createdAt: stats.ctime,
+        };
+      } catch (error) {
+        console.error(`Error reading file data for ${filePath}:`, error);
+        return null; // return null for files that caused an error
+      }
+    }).filter(file => file !== null); // remove null entries from the fileList
 
-    res.set('Content-Type', 'application/json');
     res.json(fileList);
-  });
+  } catch (error) {
+    console.error("Error getting file list:", error);
+    res.status(500).json({ message: "Error getting file list" });
+  }
 });
 
 app.delete("/uploads/:id", (req, res) => {

@@ -21,16 +21,17 @@ const FileTable = ({
         </tr>
       </thead>
       <tbody>
-        {data.map((file) => (
-          <TableRow
-            key={file.id}
-            file={file}
-            onFileClick={onFileClick}
-            onDeleteClick={onDeleteClick}
-            onUpdate={onUpdate}
-          />
-        ))}
-      </tbody>
+  {data.map((file) => (
+    <TableRow
+      key={file.id}
+      file={file}
+      onFileClick={onFileClick}
+      onDeleteClick={onDeleteClick}
+      onUpdate={onUpdate}
+    />
+  ))}
+</tbody>
+
     </table>
   );
 };

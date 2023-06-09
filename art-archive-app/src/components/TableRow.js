@@ -22,8 +22,9 @@ const TableRow = ({ file, onFileClick, onDeleteClick, onUpdate }) => {
   };
 
   const handleTagsUpdate = (newTags) => {
-    onUpdate(file.id, { ...file, tags: newTags });
-  };  
+    onUpdate(file.id, newTags);
+  }; 
+  
 
   return (
     <tr>
@@ -45,7 +46,7 @@ const TableRow = ({ file, onFileClick, onDeleteClick, onUpdate }) => {
       <td>{file.createdAt}</td>
       <td>
         <ErrorBoundary>
-        <Tags tags={file.tags} fileId={file.id} onUpdate={onUpdate} />
+        <Tags tags={file.tags} fileId={file.id} onUpdate={handleTagsUpdate} />
 
 
 

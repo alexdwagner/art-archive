@@ -12,13 +12,25 @@ const Main = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
+  // This useEffect will log the selectedFile state whenever it changes
+  useEffect(() => {
+    console.log('selectedFile:', selectedFile);
+  }, [selectedFile]);
+  
   const fetchData = async () => {
     try {
       const response = await fetch(`${API_URL}/uploads/`);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const data = await response.json();
-      setData(data);
+      console.log(data);  // Log data here
+      setData(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Error fetching file list:", error);
+      setData([]); // Ensure data is always an array even in case of an error
     }
   };
 
@@ -69,6 +81,21 @@ const Main = () => {
     }
   };
 
+  const onDeleteClick = async (id) => {
+    try {
+      const response = await fetch(`${API_URL}/uploads/${id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      // remove the deleted file from the state
+      setData((prevData) => prevData.filter((item) => item.id !== id));
+    } catch (error) {
+      console.error("Error deleting file:", error);
+    }
+  };
+
   return (
     <main className="main">
       {selectedFile && selectedFile.type.startsWith("audio/") ? (
@@ -86,14 +113,19 @@ const Main = () => {
               (file.tags && file.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase())))
           )}
           onFileClick={async (file) => {
-            const blob = await fetchFileBlob(file.url);
-            setSelectedFile(new File([blob], file.name, { type: blob.type }));
+            try {
+              const blob = await fetchFileBlob(file.url);
+              setSelectedFile(new File([blob], file.name, { type: blob.type }));
+            } catch (error) {
+              console.error("Error fetching file blob:", error);
+            }
           }}
-          onUpdate={onUpdate}
+                    onUpdate={onUpdate}
+          onDeleteClick={onDeleteClick}
         />
       </div>
     </main>
   );
-};
+ }
 
-export default Main;
+ export default Main;
