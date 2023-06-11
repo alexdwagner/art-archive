@@ -11,6 +11,9 @@ const Main = () => {
   const [data, setData] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const onRefreshButtonClick = () => {
+    fetchData();
+  };
 
   // This useEffect will log the selectedFile state whenever it changes
   useEffect(() => {
@@ -54,6 +57,7 @@ const fetchFileBlob = async (url) => {
 };
 
 // This function updates a file with new tags
+// This function updates a file with new tags
 const onUpdate = async (id, newTags) => {
   const originalFile = data.find((file) => file.id === id);
   if (!originalFile) {
@@ -64,7 +68,7 @@ const onUpdate = async (id, newTags) => {
   const updatedFile = { ...originalFile, tags: newTags };
 
   try {
-    const response = await fetch(`${API_URL}/uploads/${id}`, {
+    const response = await fetch(`${API_URL}/api/uploads/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -85,9 +89,10 @@ const onUpdate = async (id, newTags) => {
 };
 
 // This function deletes a file
+// This function deletes a file
 const onDeleteClick = async (id) => {
   try {
-    const response = await fetch(`${API_URL}/uploads/${id}`, {
+    const response = await fetch(`${API_URL}/api/uploads/${id}`, {
       method: 'DELETE',
     });
     if (!response.ok) {
@@ -109,6 +114,8 @@ const onDeleteClick = async (id) => {
       <div className="form-and-table">
         <FileUploadForm updateData={fetchData} />
         <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+        {/* Refresh button */}
+        <button onClick={onRefreshButtonClick}>Refresh</button>
         <FileTable
           data={data.filter(
             (file) =>
