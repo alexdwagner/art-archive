@@ -1,4 +1,5 @@
-const Media = sequelize.define('Media', {
+module.exports = (sequelize, Sequelize) => {
+  const Media = sequelize.define('Media', {
     id: {
       type: Sequelize.INTEGER,
       autoIncrement: true,
@@ -17,33 +18,31 @@ const Media = sequelize.define('Media', {
       type: Sequelize.STRING,
       allowNull: false,
     },
+    size: {
+      type: Sequelize.BIGINT,
+      allowNull: false,
+    },
+    type: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    createdAt: {
+      type: Sequelize.DATE,
+      allowNull: false,
+    },
     userId: {
       type: Sequelize.INTEGER,
       allowNull: false,
       references: {
-        model: 'users', // 'users' refers to table name
-        key: 'id', // 'id' refers to column name in users table
+        model: 'users',
+        key: 'id',
       }
     },
-    viewCount: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      defaultValue: 0
-    },
-    likeCount: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      defaultValue: 0
-    },
-    dislikeCount: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      defaultValue: 0
-    },
-    commentCount: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      defaultValue: 0
-    }
   });
-  
+
+  Media.associate = function(models) {
+    Media.belongsToMany(models.Tag, { through: 'MediaTags' });
+  };
+
+  return Media;
+};

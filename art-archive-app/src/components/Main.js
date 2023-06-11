@@ -16,85 +16,88 @@ const Main = () => {
   useEffect(() => {
     console.log('selectedFile:', selectedFile);
   }, [selectedFile]);
-  
-  const fetchData = async () => {
-    try {
-      const response = await fetch(`${API_URL}/uploads/`);
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+// This function fetches data from the uploads endpoint of your API.
+const fetchData = async () => {
+  try {
+    const response = await fetch(`${API_URL}/uploads/`);
 
-      const data = await response.json();
-      console.log(data);  // Log data here
-      setData(Array.isArray(data) ? data : []);
-    } catch (error) {
-      console.error("Error fetching file list:", error);
-      setData([]); // Ensure data is always an array even in case of an error
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
-  };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+    const data = await response.json();
+    console.log("Fetched data:", data);  
+    setData(Array.isArray(data) ? data : []);
+  } catch (error) {
+    console.error("Error fetching file list:", error);
+    setData([]); 
+  }
+};
 
-  const fetchFileBlob = async (url) => {
-    try {
-      const response = await fetch(url);
+useEffect(() => {
+  fetchData();
+}, []);
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return await response.blob();
-    } catch (error) {
-      console.error("Error fetching file blob:", error);
+// This function fetches a blob from a specific URL. 
+const fetchFileBlob = async (url) => {
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
     }
-  };
+    return await response.blob();
+  } catch (error) {
+    console.error("Error fetching file blob:", error);
+  }
+};
 
-  const onUpdate = async (id, newTags) => {
-    const originalFile = data.find((file) => file.id === id);
-    if (!originalFile) {
-      console.error("File not found:", id);
-      return;
-    }
-  
-    const updatedFile = { ...originalFile, tags: newTags };
-  
-    try {
-      const response = await fetch(`${API_URL}/uploads/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedFile),
-      });
-  
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-  
-      setData((prevData) =>
-        prevData.map((item) => (item.id === id ? updatedFile : item))
-      );
-    } catch (error) {
-      console.error("Error updating file:", error);
-    }
-  };
+// This function updates a file with new tags
+const onUpdate = async (id, newTags) => {
+  const originalFile = data.find((file) => file.id === id);
+  if (!originalFile) {
+    console.error("File not found:", id);
+    return;
+  }
 
-  const onDeleteClick = async (id) => {
-    try {
-      const response = await fetch(`${API_URL}/uploads/${id}`, {
-        method: 'DELETE',
-      });
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      // remove the deleted file from the state
-      setData((prevData) => prevData.filter((item) => item.id !== id));
-    } catch (error) {
-      console.error("Error deleting file:", error);
+  const updatedFile = { ...originalFile, tags: newTags };
+
+  try {
+    const response = await fetch(`${API_URL}/uploads/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedFile),
+    });
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
     }
-  };
+
+    setData((prevData) =>
+      prevData.map((item) => (item.id === id ? updatedFile : item))
+    );
+  } catch (error) {
+    console.error("Error updating file:", error);
+  }
+};
+
+// This function deletes a file
+const onDeleteClick = async (id) => {
+  try {
+    const response = await fetch(`${API_URL}/uploads/${id}`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    setData((prevData) => prevData.filter((item) => item.id !== id));
+  } catch (error) {
+    console.error("Error deleting file:", error);
+  }
+};
 
   return (
     <main className="main">
