@@ -1,6 +1,6 @@
 # Art Archive
 
-Art Archive is a web-based platform designed for artists, collectors, and art enthusiasts to store, manage, and share artworks. It includes both frontend and backend components.
+Art Archive is a web-based platform designed for artists, makers, and digital media creators to store, manage, and share their own artworks, notes, and digital materials. It's meant to serve as a tool for preserving your own digital materials, and to allow you to easily find those materials to share them with others.
 
 ## Requirements
 
