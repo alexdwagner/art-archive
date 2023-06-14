@@ -1,23 +1,33 @@
-import React, { useRef, useEffect } from 'react';
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_1 = require("react");
 const AudioPlayer = ({ src, onPlay }) => {
-  const audioRef = useRef();
-
-  useEffect(() => {
-    console.log('Audio src updated:', src);
-    if (src && onPlay) {
-      audioRef.current.load();
-      audioRef.current.play();
-      onPlay();
+    const audioRef = (0, react_1.useRef)();
+    (0, react_1.useEffect)(() => {
+        console.log('Audio src updated:', src);
+        if (src && onPlay) {
+            audioRef.current.load();
+            audioRef.current.play();
+            onPlay();
+        }
+    }, [src, onPlay]);
+    return ref = { audioRef };
+    controls >
+        src;
+    {
+        src;
     }
-  }, [src, onPlay]);
-
-  return (
-    <audio ref={audioRef} controls>
-      <source src={src} />
-      Your browser does not support the audio element.
-    </audio>
-  );
+    />;
+    Your;
+    browser;
+    does;
+    not;
+    support;
+    the;
+    audio;
+    element.
+        < /audio>;
 };
-
-export default AudioPlayer;
+;
+;
+exports.default = AudioPlayer;

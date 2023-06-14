@@ -1,37 +1,35 @@
-import React, { useState } from "react";
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_1 = require("react");
 const EditableCell = ({ value, onUpdate }) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [newValue, setNewValue] = useState(value);
-
-  const handleEdit = () => {
-    setIsEditing(true);
-  };
-
-  const handleSave = () => {
-    setIsEditing(false);
-    onUpdate(newValue);
-  };
-
-  const handleChange = (e) => {
-    setNewValue(e.target.value);
-  };
-
-  return (
-    <td>
-      {isEditing ? (
-        <>
-          <input type="text" value={newValue} onChange={handleChange} />
-          <button onClick={handleSave}>Save</button>
-        </>
-      ) : (
-        <>
-          <span>{value}</span>
-          <button onClick={handleEdit}>Edit</button>
-        </>
-      )}
-    </td>
-  );
+    const [isEditing, setIsEditing] = (0, react_1.useState)(false);
+    const [newValue, setNewValue] = (0, react_1.useState)(value);
+    const handleEdit = () => {
+        setIsEditing(true);
+    };
+    const handleSave = () => {
+        setIsEditing(false);
+        onUpdate(newValue);
+    };
+    const handleChange = (e) => {
+        setNewValue(e.target.value);
+    };
+    return ({} >
+        type) = "text";
+    value = { newValue };
+    onChange = { handleChange } /  >
+        onClick;
+    {
+        handleSave;
+    }
+     > Save < /button>
+        < />;
 };
-
-export default EditableCell;
+({ value } < /span>
+    < button);
+onClick = { handleEdit } > Edit < /button>
+    < />;
+/td>;
+;
+;
+exports.default = EditableCell;

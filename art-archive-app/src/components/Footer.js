@@ -1,9 +1,11 @@
-import React from "react";
-
-const Footer = () => (
-  <footer>
-    <p>&copy; 2023 Art Archive. All rights reserved.</p>
-  </footer>
-);
-
-export default Footer;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Footer = () => ( & copy);
+2023;
+Art;
+Archive.All;
+rights;
+reserved. < /p>
+    < /footer>;
+;
+exports.default = Footer;

@@ -1,20 +1,29 @@
-import React from "react";
-import ImagePreview from "./ImagePreview";
-import AudioPreview from "./AudioPreview";
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const FilePreview = ({ file }) => {
-  if (!file) {
-    return <div>No files to preview</div>;
-  }
-
-  switch (file.type.split("/")[0]) {
-    case "image":
-      return <ImagePreview file={file} />;
-    case "audio":
-      return <AudioPreview file={[file]} />;
-    default:
-      return <div>Unsupported file type</div>;
-  }
+    if (!file) {
+        return No;
+        files;
+        to;
+        preview < /div>;;
+    }
+    switch (file.type.split("/")[0]) {
+        case "image":
+            return file;
+            {
+                file;
+            }
+            />;;
+        case "audio":
+            return file;
+            {
+                [file];
+            }
+            />;;
+        default:
+            return Unsupported;
+            file;
+            type < /div>;;
+    }
 };
-
-export default FilePreview;
+exports.default = FilePreview;

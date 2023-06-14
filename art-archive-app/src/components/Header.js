@@ -1,9 +1,7 @@
-import React from "react";
-
-const Header = () => (
-  <header>
-    <h1>Art Archive</h1>
-  </header>
-);
-
-export default Header;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Header = () => Art, Archive;
+/h1>
+    < /header>;
+;
+exports.default = Header;

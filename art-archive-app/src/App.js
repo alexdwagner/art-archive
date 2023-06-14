@@ -1,19 +1,17 @@
-import React, { useState, useEffect } from "react";
-import ErrorBoundary from "./components/ErrorBoundary";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import Main from "./components/Main";
-
-const App = () => {
-  return (
-    <ErrorBoundary>
-      <div className="App">
-        <Header />
-        <Main />
-        <Footer />
-      </div>
-    </ErrorBoundary>
-  );
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-
-export default App;
+Object.defineProperty(exports, "__esModule", { value: true });
+const Main_1 = __importDefault(require("./components/Main"));
+const App = () => {
+    return className = "App" >
+        />
+        < Main_1.default /  >
+        />
+        < /div>
+        < /ErrorBoundary>;
+};
+;
+;
+exports.default = App;
