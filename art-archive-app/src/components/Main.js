@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -8,23 +7,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const react_1 = require("react");
-const SearchBar_1 = __importDefault(require("./SearchBar"));
-const FileTable_1 = __importDefault(require("./FileTable"));
+import { useState, useEffect } from "react";
+import SearchBar from "./SearchBar";
+import FileTable from "./FileTable";
 const API_URL = "http://localhost:3001";
 const Main = () => {
-    const [data, setData] = (0, react_1.useState)([]);
-    const [selectedFile, setSelectedFile] = (0, react_1.useState)(null);
-    const [searchQuery, setSearchQuery] = (0, react_1.useState)("");
+    const [data, setData] = useState([]);
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [searchQuery, setSearchQuery] = useState("");
     const onRefreshButtonClick = () => {
         fetchData();
     };
     // This useEffect will log the selectedFile state whenever it changes
-    (0, react_1.useEffect)(() => {
+    useEffect(() => {
         console.log('selectedFile:', selectedFile);
     }, [selectedFile]);
     // This function fetches data from the uploads endpoint of your API.
@@ -43,7 +38,7 @@ const Main = () => {
             setData([]);
         }
     });
-    (0, react_1.useEffect)(() => {
+    useEffect(() => {
         fetchData();
     }, []);
     // This function fetches a blob from a specific URL. 
@@ -115,13 +110,13 @@ className;
     fetchData;
 }
 />
-    < SearchBar_1.default;
+    < SearchBar;
 searchQuery = { searchQuery };
 setSearchQuery = { setSearchQuery } /  >
     { /* Refresh button */}
     < button;
 onClick = { onRefreshButtonClick } > Refresh < /button>
-    < FileTable_1.default;
+    < FileTable;
 data = { data, : .filter((file) => file.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         (file.tags && file.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase())))) };
 onFileClick = { async(file) { } };
@@ -140,4 +135,4 @@ onDeleteClick = { onDeleteClick }
     /div>
     < /main>;
 ;
-exports.default = Main;
+export default Main;

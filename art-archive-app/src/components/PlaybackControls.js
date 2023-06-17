@@ -1,5 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 // PlaybackControls.js
 const PlaybackControls = ({ playing, onPlayPause, onStop, playbackRate, onPlaybackRateChange, }) => {
     const handlePlaybackRateChange = (e) => {
@@ -33,4 +31,4 @@ const PlaybackControls = ({ playing, onPlayPause, onStop, playbackRate, onPlayba
 };
 ;
 ;
-exports.default = PlaybackControls;
+export default PlaybackControls;

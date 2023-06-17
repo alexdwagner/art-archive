@@ -1,13 +1,11 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const react_1 = require("react");
-require("../styles/Tags.css");
+import { useState, useRef, useEffect } from "react";
+import '../styles/Tags.css';
 const Tags = ({ tags = [], fileId, onUpdate }) => {
-    const [inputValue, setInputValue] = (0, react_1.useState)("");
-    const [suggestions, setSuggestions] = (0, react_1.useState)([]);
-    const [isSuggesting, setIsSuggesting] = (0, react_1.useState)(false);
-    const inputRef = (0, react_1.useRef)(null);
-    (0, react_1.useEffect)(() => {
+    const [inputValue, setInputValue] = useState("");
+    const [suggestions, setSuggestions] = useState([]);
+    const [isSuggesting, setIsSuggesting] = useState(false);
+    const inputRef = useRef(null);
+    useEffect(() => {
         if (isSuggesting) {
             inputRef.current.focus();
         }
@@ -86,4 +84,4 @@ setIsSuggesting(true);
 /div>;
 ;
 ;
-exports.default = Tags;
+export default Tags;

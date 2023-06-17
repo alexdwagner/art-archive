@@ -1,17 +1,12 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const react_1 = require("react");
-const wavesurfer_js_1 = __importDefault(require("wavesurfer.js"));
+import { useEffect, useRef, useState } from 'react';
+import WaveSurfer from 'wavesurfer.js';
 const Waveform = ({ file, onReady, onAudioProcess, onFinish }) => {
-    const waveformRef = (0, react_1.useRef)(null);
-    const wavesurfer = (0, react_1.useRef)(null);
-    const [isPlaying, setIsPlaying] = (0, react_1.useState)(false); // Add this line
-    (0, react_1.useEffect)(() => {
+    const waveformRef = useRef(null);
+    const wavesurfer = useRef(null);
+    const [isPlaying, setIsPlaying] = useState(false); // Add this line
+    useEffect(() => {
         if (file) {
-            wavesurfer.current = wavesurfer_js_1.default.create({
+            wavesurfer.current = WaveSurfer.create({
                 container: waveformRef.current,
                 waveColor: 'violet',
                 progressColor: 'purple',
@@ -36,7 +31,7 @@ const Waveform = ({ file, onReady, onAudioProcess, onFinish }) => {
             }
         };
     }, [file, onReady, onAudioProcess, onFinish]);
-    (0, react_1.useEffect)(() => {
+    useEffect(() => {
         if (wavesurfer.current) {
             isPlaying ? wavesurfer.current.play() : wavesurfer.current.pause();
         }
@@ -50,4 +45,4 @@ const Waveform = ({ file, onReady, onAudioProcess, onFinish }) => {
     }
     />;;
 };
-exports.default = Waveform;
+export default Waveform;

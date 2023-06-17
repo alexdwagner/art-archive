@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-require("../styles/SearchBar.css");
+import "../styles/SearchBar.css";
 const SearchBar = ({ searchQuery, setSearchQuery }) => {
     const handleChange = (e) => {
         setSearchQuery(e.target.value);
@@ -16,4 +14,4 @@ const SearchBar = ({ searchQuery, setSearchQuery }) => {
 };
 ;
 ;
-exports.default = SearchBar;
+export default SearchBar;

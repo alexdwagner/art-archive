@@ -1,6 +1,11 @@
 import React from "react";
 
-const TableActions = ({ selectedFiles = [], handleDelete }) => {
+interface TableActionsProps {
+  selectedFiles?: any[];
+  handleDelete: (selectedFiles: any[]) => void;
+}
+
+const TableActions: React.FC<TableActionsProps> = ({ selectedFiles = [], handleDelete }) => {
   return (
     <div className="table-actions">
       {selectedFiles.length > 0 && (

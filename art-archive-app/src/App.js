@@ -1,17 +1,13 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const Main_1 = __importDefault(require("./components/Main"));
+import React from "react";
+import ErrorBoundary from "./components/ErrorBoundary";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import Main from "./components/Main";
 const App = () => {
-    return className = "App" >
-        />
-        < Main_1.default /  >
-        />
-        < /div>
-        < /ErrorBoundary>;
+    return (React.createElement(ErrorBoundary, null,
+        React.createElement("div", { className: "App" },
+            React.createElement(Header, null),
+            React.createElement(Main, null),
+            React.createElement(Footer, null))));
 };
-;
-;
-exports.default = App;
+export default App;

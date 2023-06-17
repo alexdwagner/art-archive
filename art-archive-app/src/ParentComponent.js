@@ -1,19 +1,14 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const react_1 = require("react");
-const axios_1 = __importDefault(require("axios"));
+import { useState } from 'react';
+import axios from 'axios';
 function ParentComponent() {
-    const [selectedFile, setSelectedFile] = (0, react_1.useState)(null);
+    const [selectedFile, setSelectedFile] = useState(null);
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
         if (file && file.type === 'video/quicktime') {
             const formData = new FormData();
             formData.append('file', file);
-            axios_1.default
+            axios
                 .post('http://localhost:3001/convert', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -37,4 +32,4 @@ function ParentComponent() {
         < /div>;
     ;
 }
-exports.default = ParentComponent;
+export default ParentComponent;

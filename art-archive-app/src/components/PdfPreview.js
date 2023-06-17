@@ -1,5 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 const PdfPreview = ({ src }) => title = "pdf-preview";
 src = { src };
 style = {};
@@ -10,4 +8,4 @@ style = {};
 }
 />;
 ;
-exports.default = PdfPreview;
+export default PdfPreview;

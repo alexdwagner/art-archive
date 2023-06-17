@@ -1,24 +1,13 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+import React from "react";
 const TableActions = ({ selectedFiles = [], handleDelete }) => {
-    return className = "table-actions" >
-        { selectedFiles, : .length > 0 && className, "selected-files":  >
-                Selected, files: { selectedFiles, : .length } < /p>
-                < button, onClick = {}() };
+    return (React.createElement("div", { className: "table-actions" },
+        selectedFiles.length > 0 && (React.createElement("div", { className: "selected-files" },
+            React.createElement("p", null,
+                "Selected files: ",
+                selectedFiles.length),
+            React.createElement("button", { onClick: () => handleDelete(selectedFiles) }, "Delete"))),
+        React.createElement("div", { className: "checkbox-container" },
+            React.createElement("input", { type: "checkbox", id: "select-all" }),
+            React.createElement("label", { htmlFor: "select-all" }, "Select all"))));
 };
-handleDelete(selectedFiles);
- > Delete < /button>
-    < /div>;
-className;
-"checkbox-container" >
-    type;
-"checkbox";
-id = "select-all" /  >
-    htmlFor;
-"select-all" > Select;
-all < /label>
-    < /div>
-    < /div>;
-;
-;
-exports.default = TableActions;
+export default TableActions;

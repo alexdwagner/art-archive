@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 
 const AudioPlayer = ({ src, onPlay }) => {
-  const audioRef = useRef();
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
     console.log('Audio src updated:', src);
@@ -11,6 +11,10 @@ const AudioPlayer = ({ src, onPlay }) => {
       onPlay();
     }
   }, [src, onPlay]);
+
+  if (!src) {
+    return null; // or return a placeholder
+  }
 
   return (
     <audio ref={audioRef} controls>

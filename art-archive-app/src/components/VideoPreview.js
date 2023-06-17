@@ -1,5 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 const VideoPreview = ({ src }) => src = { src };
 controls;
 style = {};
@@ -10,4 +8,4 @@ style = {};
 }
 />;
 ;
-exports.default = VideoPreview;
+export default VideoPreview;

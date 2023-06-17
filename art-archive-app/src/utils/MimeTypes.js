@@ -1,8 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.fileTypeToMimeType = exports.supportedImageFormats = void 0;
-exports.supportedImageFormats = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/webp', 'image/tiff'];
-const fileTypeToMimeType = (fileType) => {
+export const supportedImageFormats = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/webp', 'image/tiff'];
+export const fileTypeToMimeType = (fileType) => {
     const fileTypes = {
         jpg: 'image/jpeg',
         jpeg: 'image/jpeg',
@@ -23,4 +20,3 @@ const fileTypeToMimeType = (fileType) => {
     };
     return fileTypes[fileType] || null;
 };
-exports.fileTypeToMimeType = fileTypeToMimeType;

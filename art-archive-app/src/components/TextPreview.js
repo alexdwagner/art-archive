@@ -1,5 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 const TextPreview = ({ src }) => title = "text-preview";
 src = { src };
 style = {};
@@ -10,4 +8,4 @@ style = {};
 }
 />;
 ;
-exports.default = TextPreview;
+export default TextPreview;

@@ -1,27 +1,14 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+import React from 'react';
 const TableHeader = ({ handleSort, sortConfig, columnWidths }) => {
     const renderSortIcon = (key) => {
         if (sortConfig.key === key) {
-            return { sortConfig, : .direction === 'ascending' ? '▲' : '▼' } < /span>;;
+            return React.createElement("span", null, sortConfig.direction === 'ascending' ? '▲' : '▼');
         }
         return null;
     };
-    return { ['name', 'size', 'type', 'createdAt', 'tags']: .map((key, index) => key = { key }, onClick = {}()) };
+    return (React.createElement("thead", null,
+        React.createElement("tr", null, ['name', 'size', 'type', 'createdAt', 'tags'].map((key) => (React.createElement("th", { key: key, onClick: () => handleSort(key), style: { width: `${columnWidths[key]}px` } },
+            key.charAt(0).toUpperCase() + key.slice(1),
+            renderSortIcon(key)))))));
 };
-handleSort(key);
-style = {};
-{
-    width: `${columnWidths[key]}px`;
-}
-    >
-        { key, : .charAt(0).toUpperCase() + key.slice(1) };
-{
-    renderSortIcon(key);
-}
-/th>;
-/tr>
-    < /thead>;
-;
-;
-exports.default = TableHeader;
+export default TableHeader;

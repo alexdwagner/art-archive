@@ -1,11 +1,9 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const react_1 = require("react");
-require("../styles/Notes.css");
+import { useState, useEffect } from "react";
+import "../styles/Notes.css";
 const Notes = ({ file }) => {
-    const [notes, setNotes] = (0, react_1.useState)([]);
+    const [notes, setNotes] = useState([]);
     // Load the notes from the local storage when the file changes
-    (0, react_1.useEffect)(() => {
+    useEffect(() => {
         if (file) {
             const storedNotes = localStorage.getItem(file.name);
             if (storedNotes) {
@@ -17,7 +15,7 @@ const Notes = ({ file }) => {
         }
     }, [file]);
     // Save the notes to the local storage when they change
-    (0, react_1.useEffect)(() => {
+    useEffect(() => {
         if (file && notes.length > 0) {
             localStorage.setItem(file.name, JSON.stringify(notes));
         }
@@ -55,4 +53,4 @@ const Notes = ({ file }) => {
 };
 ;
 ;
-exports.default = Notes;
+export default Notes;

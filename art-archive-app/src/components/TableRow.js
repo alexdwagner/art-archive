@@ -1,9 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const react_1 = require("react");
-const TableRow = ({ file, onFileClick, onDeleteClick, onUpdate }) => {
-    const [isEditing, setIsEditing] = (0, react_1.useState)(false);
-    const [newName, setNewName] = (0, react_1.useState)(file.name);
+import { useState } from "react";
+const TableRow = ({ file, onFileClick, onDeleteClick, onUpdate, checkedItems, setCheckedItems }) => {
+    const [isEditing, setIsEditing] = useState(false);
+    const [newName, setNewName] = useState(file.name);
     const handleEdit = () => {
         setIsEditing(true);
     };
@@ -17,8 +15,19 @@ const TableRow = ({ file, onFileClick, onDeleteClick, onUpdate }) => {
     const handleTagsUpdate = (newTags) => {
         onUpdate(file.id, newTags);
     };
-    return ({} >
-        type) = "text";
+    const handleCheckboxChange = (event) => {
+        setCheckedItems(Object.assign(Object.assign({}, checkedItems), { [file.id]: event.target.checked }));
+    };
+    return type = "checkbox";
+    id = {} `select-${file.id}`;
+};
+checked = {};
+checkedItems[file.id];
+onChange = { handleCheckboxChange }
+    /  >
+    (/td>);
+{
+    isEditing ? type = "text" : ;
     value = { newName };
     onChange = { handleChange } /  >
         onClick;
@@ -27,9 +36,9 @@ const TableRow = ({ file, onFileClick, onDeleteClick, onUpdate }) => {
     }
      > Save < /button>
         < />;
-};
-onClick = {}();
-onFileClick(file);
+    onClick = {}();
+    onFileClick(file);
+}
  > { file, : .name } < /span>
     < button;
 onClick = { handleEdit } > Edit < /button>
@@ -57,4 +66,4 @@ onUpdate = { handleTagsUpdate } /  >
     < /tr>;
 ;
 ;
-exports.default = TableRow;
+export default TableRow;
