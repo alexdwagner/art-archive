@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { FC } from 'react';
 
-const ImagePreview = ({ file }) => {
+type Props = {
+  file: File | null;
+}
+
+const ImagePreview: FC<Props> = ({ file }) => {
   if (!file) {
     return <div>No image to preview</div>;
   }

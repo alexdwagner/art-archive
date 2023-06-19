@@ -1,23 +1,24 @@
-import React from "react";
-import ImagePreview from "./ImagePreview";
-import AudioPreview from "./AudioPreview";
-import { MyFile } from './types'; // import MyFile from types.ts
+import React, { FC } from 'react';
+import { MyFile } from './types';
+import ImagePreview from './ImagePreview';
+import AudioPreview from './AudioPreview';
 
-// Define the props for the FilePreview component
-interface FilePreviewProps {
-  file?: MyFile; // Use MyFile instead of File
+type Props = {
+  file: MyFile;
 }
 
-const FilePreview: React.FC<FilePreviewProps> = ({ file }) => {
-  if (!file) {
-    return <div>No files to preview</div>;
-  }
+const FilePreview: FC<Props> = ({ file }) => {
+  const fileObject = new File(
+    [file.url],
+    file.name,
+    { type: file.type, lastModified: file.lastModified }
+  );
 
   switch (file.type.split("/")[0]) {
     case "image":
-      return <ImagePreview file={file} />;
+      return <ImagePreview file={fileObject} />;
     case "audio":
-      return <AudioPreview file={file} />;
+      return <AudioPreview file={fileObject} />;
     default:
       return <div>Unsupported file type</div>;
   }

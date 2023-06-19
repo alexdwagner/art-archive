@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { ChangeEvent, MouseEventHandler } from 'react';
 
-// PlaybackControls.js
-const PlaybackControls = ({
+interface PlaybackControlsProps {
+  playing: boolean;
+  onPlayPause: MouseEventHandler<HTMLButtonElement>;
+  onStop: MouseEventHandler<HTMLButtonElement>;
+  playbackRate: number;
+  onPlaybackRateChange: (value: number) => void;
+}
+
+const PlaybackControls: React.FC<PlaybackControlsProps> = ({
   playing,
   onPlayPause,
   onStop,
   playbackRate,
   onPlaybackRateChange,
 }) => {
-  const handlePlaybackRateChange = (e) => {
+  const handlePlaybackRateChange = (e: ChangeEvent<HTMLSelectElement>) => {
     onPlaybackRateChange(parseFloat(e.target.value));
   };
 
@@ -32,4 +39,3 @@ const PlaybackControls = ({
 };
 
 export default PlaybackControls;
-
