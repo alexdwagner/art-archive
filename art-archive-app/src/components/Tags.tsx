@@ -1,31 +1,37 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, KeyboardEvent, ChangeEvent } from "react";
 import '../styles/Tags.css';
 
-const Tags = ({ tags = [], fileId, onUpdate }) => {
+interface TagsProps {
+  tags?: string[];
+  fileId: string; // Modify to match actual type of fileId
+  onUpdate: (fileId: string, tags: { tags: string[] }) => void; // Modify to match actual onUpdate function
+}
+
+const Tags = ({ tags = [], fileId, onUpdate }: TagsProps) => {
   const [inputValue, setInputValue] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
   const [isSuggesting, setIsSuggesting] = useState(false);
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (isSuggesting) {
+    if (isSuggesting && inputRef.current) {
       inputRef.current.focus();
     }
   }, [isSuggesting]);
 
-  const handleInputValueChange = (e) => {
+  const handleInputValueChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      handleAddTag(e.target.value);
+      handleAddTag(e.currentTarget.value);
       return;
     }
 
-    if (e.target.value) {
+    if (e.currentTarget.value && tags) {
       const matchingSuggestions = tags.filter((tag) =>
-        tag.toLowerCase().startsWith(e.target.value.toLowerCase())
+        tag.toLowerCase().startsWith(e.currentTarget.value.toLowerCase())
       );
       setSuggestions(matchingSuggestions);
     } else {
@@ -33,7 +39,7 @@ const Tags = ({ tags = [], fileId, onUpdate }) => {
     }
   };
 
-  const handleAddTag = (newTag) => {
+  const handleAddTag = (newTag: string) => {
     setInputValue("");
     setSuggestions([]);
     setIsSuggesting(false);
@@ -41,11 +47,11 @@ const Tags = ({ tags = [], fileId, onUpdate }) => {
     onUpdate(fileId, { tags: newTags });
   };
 
-  const handleSuggestionClick = (suggestedTag) => {
+  const handleSuggestionClick = (suggestedTag: string) => {
     handleAddTag(suggestedTag);
   };
 
-  const handleRemoveTag = (tagToRemove) => {
+  const handleRemoveTag = (tagToRemove: string) => {
     const newTags = tags.filter((tag) => tag !== tagToRemove);
     onUpdate(fileId, { tags: newTags });
   };

@@ -1,17 +1,25 @@
-import React, { Component } from 'react';
+import React, { Component, ErrorInfo, ReactNode } from 'react';
 
-class ErrorBoundary extends Component {
-  constructor(props) {
+interface State {
+  hasError: boolean;
+}
+
+interface Props {
+  children: ReactNode;
+}
+
+class ErrorBoundary extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError(error) {
+  static getDerivedStateFromError(error: Error): State {
     // Update state so the next render will show the fallback UI.
     return { hasError: true };
   }
 
-  componentDidCatch(error, errorInfo) {
+  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     // You can also log the error to an error reporting service
     console.error('Error:', error, errorInfo);
   }
@@ -25,13 +33,5 @@ class ErrorBoundary extends Component {
     return this.props.children;
   }
 }
-
-function App() {
-  return (
-    <ErrorBoundary>
-      {/* Your App component code */}
-    </ErrorBoundary>
-  );
-};
 
 export default ErrorBoundary;

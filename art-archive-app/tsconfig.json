@@ -10,7 +10,7 @@
     "allowJs": true,
     "module": "esnext",
     "moduleResolution": "node",
-    "rootDir": "./art-archive-app/src",
+    "rootDir": "./src",
     "outDir": "./dist",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,

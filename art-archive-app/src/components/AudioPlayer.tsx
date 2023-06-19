@@ -1,11 +1,16 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, FunctionComponent } from 'react';
 
-const AudioPlayer = ({ src, onPlay }) => {
-  const audioRef = useRef<HTMLAudioElement>(null);
+interface AudioPlayerProps {
+  src: string;
+  onPlay: () => void;
+}
+
+const AudioPlayer: FunctionComponent<AudioPlayerProps> = ({ src, onPlay }) => {
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     console.log('Audio src updated:', src);
-    if (src && onPlay) {
+    if (src && onPlay && audioRef.current) {
       audioRef.current.load();
       audioRef.current.play();
       onPlay();

@@ -1,6 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, ChangeEvent } from "react";
 
-const EditableCell = ({ value, onUpdate }) => {
+interface EditableCellProps {
+  value: string; 
+  onUpdate: (newValue: string) => void; 
+}
+
+const EditableCell = ({ value, onUpdate }: EditableCellProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [newValue, setNewValue] = useState(value);
 
@@ -13,7 +18,7 @@ const EditableCell = ({ value, onUpdate }) => {
     onUpdate(newValue);
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setNewValue(e.target.value);
   };
 

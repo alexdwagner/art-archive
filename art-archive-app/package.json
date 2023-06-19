@@ -64,6 +64,10 @@
   },
   "devDependencies": {
     "@jridgewell/sourcemap-codec": "^1.4.15",
-    "@rollup/plugin-terser": "^0.4.3"
+    "@rollup/plugin-terser": "^0.4.3",
+    "@types/wavesurfer.js": "^6.0.6",
+    "@typescript-eslint/eslint-plugin": "^5.60.0",
+    "@typescript-eslint/parser": "^5.60.0",
+    "eslint": "^8.43.0"
   }
 }
