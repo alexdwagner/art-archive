@@ -1,4 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
+
   const Tag = sequelize.define('Tag', {
     id: {
       type: Sequelize.INTEGER,

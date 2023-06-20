@@ -1,5 +1,6 @@
 "use strict";
 module.exports = (sequelize, Sequelize) => {
+    console.log(require('./models/Tag'));
     const Tag = sequelize.define('Tag', {
         id: {
             type: Sequelize.INTEGER,
