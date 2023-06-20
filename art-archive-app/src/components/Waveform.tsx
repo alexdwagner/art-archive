@@ -1,13 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react';
 import WaveSurfer from 'wavesurfer.js';
 
-const Waveform = ({ file, onReady, onAudioProcess, onFinish }) => {
-  const waveformRef = useRef(null);
-  const wavesurfer = useRef(null);
-  const [isPlaying, setIsPlaying] = useState(false); // Add this line
+interface WaveformProps {
+  file: Blob;
+  onReady: (wavesurfer: WaveSurfer) => void;
+  onAudioProcess: () => void;
+  onFinish: () => void;
+}
+
+const Waveform: React.FC<WaveformProps> = ({ file, onReady, onAudioProcess, onFinish }) => {
+  const waveformRef = useRef<HTMLDivElement | null>(null);
+  const wavesurfer = useRef<WaveSurfer | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
-    if (file) {
+    if (file && waveformRef.current) {
       wavesurfer.current = WaveSurfer.create({
         container: waveformRef.current,
         waveColor: 'violet',
@@ -24,7 +31,9 @@ const Waveform = ({ file, onReady, onAudioProcess, onFinish }) => {
       wavesurfer.current.loadBlob(file);
 
       wavesurfer.current.on('ready', () => {
-        onReady(wavesurfer.current);
+        if (wavesurfer.current) {
+          onReady(wavesurfer.current);
+        }
       });
 
       wavesurfer.current.on('audioprocess', onAudioProcess);
@@ -42,11 +51,7 @@ const Waveform = ({ file, onReady, onAudioProcess, onFinish }) => {
     if (wavesurfer.current) {
       isPlaying ? wavesurfer.current.play() : wavesurfer.current.pause();
     }
-  }, [isPlaying]); // Update this line
-
-  // const handlePlayPause = () => {
-  //   setIsPlaying((prevIsPlaying) => !prevIsPlaying);
-  // };
+  }, [isPlaying]);
 
   return <div ref={waveformRef} />;
 };

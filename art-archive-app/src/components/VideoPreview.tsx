@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { FC } from 'react';
 
-const VideoPreview = ({ src }) => (
+interface VideoPreviewProps {
+  src: string;
+}
+
+const VideoPreview: FC<VideoPreviewProps> = ({ src }) => (
   <video
     src={src}
     controls

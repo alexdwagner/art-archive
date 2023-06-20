@@ -1,27 +1,14 @@
-import React, { ChangeEvent, MouseEventHandler, SetStateAction, Dispatch, useState } from "react";
+import React, { ChangeEvent, SetStateAction, Dispatch, useState } from "react";
 import { formatBytes } from "../utils";
 import Tags from "./Tags";
 import ErrorBoundary from './ErrorBoundary';
-
-interface File {
-  id: number;
-  name: string;
-  size: number;
-  type: string;
-  createdAt: string;
-  tags: string[];
-  description: string;
-  url: string;
-  updatedAt: string;
-  lastModified: string;
-  webkitRelativePath: string;
-}
+import { MyFile } from './types';
 
 interface TableRowProps {
-  file: File;
-  onFileClick: (file: File) => void;
-  onDeleteClick: (file: File) => void;
-  onUpdate: (fileId: number, tags: { tags: string[] }) => void;
+  file: MyFile;
+  onFileClick: (file: MyFile) => void;
+  onDeleteClick: (file: MyFile) => void;
+  onUpdate: (fileId: number, data: Partial<MyFile>) => void;
   checkedItems: { [key: string]: boolean };
   setCheckedItems: Dispatch<SetStateAction<{ [key: string]: boolean }>>;
 }
@@ -43,17 +30,17 @@ const TableRow: React.FC<TableRowProps> = ({
 
   const handleSave = () => {
     setIsEditing(false);
-    onUpdate(file, file.tags);  
-  };  
+    onUpdate(file.id, { name: newName, tags: file.tags });
+  };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setNewName(e.target.value);
   };
 
-  const handleTagsUpdate = (newTags: string[]) => {
-    onUpdate(file.id, { tags: newTags });
+  const handleTagsUpdate = (fileId: string, data: { tags: string[] }) => {
+    onUpdate(Number(fileId), data);
   };
-  
+
   const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
     setCheckedItems({ ...checkedItems, [file.id]: event.target.checked });
   };
@@ -64,7 +51,7 @@ const TableRow: React.FC<TableRowProps> = ({
         <input
           type="checkbox"
           id={`select-${file.id}`}
-          checked={!!checkedItems[file.id]} // If the item ID exists in the state, mark it as checked
+          checked={!!checkedItems[file.id]} 
           onChange={handleCheckboxChange}
         />
       </td>
@@ -83,10 +70,10 @@ const TableRow: React.FC<TableRowProps> = ({
       </td>
       <td>{formatBytes(file.size)}</td>
       <td>{file.type}</td>
-      <td>{file.createdAt}</td>
+      <td>{file.createdAt.toLocaleString()}</td>
       <td>
         <ErrorBoundary>
-          <Tags tags={file.tags} fileId={file.id} onUpdate={handleTagsUpdate} />
+          <Tags tags={file.tags} fileId={file.id.toString()} onUpdate={handleTagsUpdate} />
         </ErrorBoundary>
       </td>
       <td>

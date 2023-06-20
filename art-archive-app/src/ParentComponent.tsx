@@ -1,30 +1,47 @@
 import React, { useState } from 'react';
 import FilePreview from './components/FilePreview';
 import axios from 'axios';
+import { MyFile } from './components/types';
 
 function ParentComponent() {
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFile, setSelectedFile] = useState<MyFile | null>(null);
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    setSelectedFile(file);
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
 
-    if (file && file.type === 'video/quicktime') {
-      const formData = new FormData();
-      formData.append('file', file);
+      if (file.type === 'video/quicktime') {
+        const formData = new FormData();
+        formData.append('file', file);
 
-      axios
-        .post('http://localhost:3001/convert', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        })
-        .then((response) => {
-          console.log('File converted:', response.data);
-        })
-        .catch((error) => {
-          console.error('Error converting file:', error);
-        });
+        axios
+          .post('http://localhost:3001/convert', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          })
+          .then((response) => {
+            const myFile: MyFile = {
+              id: response.data.id.toString(),
+              description: response.data.description,
+              tags: response.data.tags,
+              url: response.data.url,
+              name: file.name,
+              type: file.type,
+              size: response.data.size,
+              createdAt: response.data.createdAt,
+              updatedAt: response.data.updatedAt,
+              lastModified: response.data.lastModified,
+              webkitRelativePath: response.data.webkitRelativePath,
+            }
+            setSelectedFile(myFile);
+            console.log('File converted:', response.data);
+          })
+          .catch((error) => {
+            console.error('Error converting file:', error);
+          });
+
+      }
     }
   };
 

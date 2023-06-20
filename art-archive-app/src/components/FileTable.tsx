@@ -6,7 +6,7 @@ type Props = {
   data?: MyFile[];
   onFileClick: (file: MyFile) => void;
   onDeleteClick: (file: MyFile) => void;
-  onUpdate: (file: MyFile) => void;
+  onUpdate: (fileId: number, data: Partial<MyFile>) => void;
 }
 
 const FileTable: React.FC<Props> = ({
@@ -40,7 +40,7 @@ const FileTable: React.FC<Props> = ({
             file={file}
             onFileClick={onFileClick}
             onDeleteClick={onDeleteClick}
-            onUpdate={onUpdate}
+            onUpdate={() => onUpdate(file.id, file)}
             checkedItems={checkedItems}
             setCheckedItems={setCheckedItems}
           />

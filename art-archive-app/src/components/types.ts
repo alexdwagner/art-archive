@@ -1,17 +1,16 @@
-export interface MyFile {
+export type MyFile = {
   id: number;
-  name: string;
   description: string;
   tags: string[];
   url: string;
-  size: number;
+  name: string;
   type: string;
-  createdAt: Date;
-  updatedAt: Date;
-  lastModified: number; 
+  size: number;
+  createdAt: string;
+  updatedAt: string;
+  lastModified: number;
   webkitRelativePath: string;
-}
-
+};
 
 // If you're using tags, you'll need a type for them as well:
 export interface Tag {

@@ -1,6 +1,10 @@
 import React from 'react';
 
-const PdfPreview = ({ src }) => (
+interface PdfPreviewProps {
+  src: string;
+}
+
+const PdfPreview: React.FC<PdfPreviewProps> = ({ src }) => (
   <iframe
     title="pdf-preview"
     src={src}

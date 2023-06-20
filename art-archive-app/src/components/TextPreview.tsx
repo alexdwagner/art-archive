@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { FC } from 'react';
 
-const TextPreview = ({ src }) => (
+interface TextPreviewProps {
+  src: string;
+}
+
+const TextPreview: FC<TextPreviewProps> = ({ src }) => (
   <iframe
     title="text-preview"
     src={src}

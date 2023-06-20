@@ -1,5 +1,3 @@
-// utils.js
-
 export const imageMimeTypes = [
   'image/jpeg',
   'image/png',
@@ -36,36 +34,43 @@ export const readableDocumentMimeTypes = [
   'application/vnd.openxmlformats-officedocument.presentationml.presentation',
 ];
 
-export const getFileMimeType = (file) => {
+interface File {
+  name: string;
+}
+
+export const getFileMimeType = (file: File): string | null => {
   const fileExtension = file.name
     .toLowerCase()
     .split('.')
     .pop();
 
   return Object.values(supportedMimeTypes).find((mimeType) =>
-    mimeType.includes(fileExtension)
+    mimeType.includes(fileExtension || '')
   ) || null;
 };
 
+interface MimeTypes {
+  [key: string]: string;
+}
 
 // Combine all the MIME types into one object for easier use
-export const supportedMimeTypes = {
-  ...imageMimeTypes.reduce((acc, mimeType) => {
+export const supportedMimeTypes: MimeTypes = {
+  ...imageMimeTypes.reduce((acc: MimeTypes, mimeType) => {
     const fileExtension = mimeType.split("/")[1];
     acc[fileExtension] = mimeType;
     return acc;
   }, {}),
-  ...videoMimeTypes.reduce((acc, mimeType) => {
+  ...videoMimeTypes.reduce((acc: MimeTypes, mimeType) => {
     const fileExtension = mimeType.split("/")[1];
     acc[fileExtension] = mimeType;
     return acc;
   }, {}),
-  ...textMimeTypes.reduce((acc, mimeType) => {
+  ...textMimeTypes.reduce((acc: MimeTypes, mimeType) => {
     const fileExtension = mimeType.split("/")[1];
     acc[fileExtension] = mimeType;
     return acc;
   }, {}),
-  ...readableDocumentMimeTypes.reduce((acc, mimeType) => {
+  ...readableDocumentMimeTypes.reduce((acc: MimeTypes, mimeType) => {
     const fileExtension = mimeType.split("/")[1];
     acc[fileExtension] = mimeType;
     return acc;
@@ -73,7 +78,7 @@ export const supportedMimeTypes = {
 };
 
 // utils.js
-export function formatBytes(bytes, decimals = 2) {
+export function formatBytes(bytes: number, decimals = 2): string {
   if (bytes === 0) return '0 B';
 
   const k = 1024;
