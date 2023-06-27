@@ -11,9 +11,12 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
             allowNull: false,
         },
+    }, {
+        freezeTableName: true // This disables table name changes.
     });
     Tag.associate = function (models) {
         Tag.belongsToMany(models.Media, { through: 'MediaTags' });
     };
     return Tag;
 };
+//# sourceMappingURL=Tag.js.map

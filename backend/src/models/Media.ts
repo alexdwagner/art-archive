@@ -3,10 +3,10 @@ module.exports = (sequelize, Sequelize) => {
     id: {
       type: Sequelize.INTEGER,
       autoIncrement: true,
-      allowNull: false,
+      allowNull: true,
       primaryKey: true
     },
-    title: {
+    name: {
       type: Sequelize.STRING,
       allowNull: false,
     },
@@ -32,12 +32,14 @@ module.exports = (sequelize, Sequelize) => {
     },
     userId: {
       type: Sequelize.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'users',
         key: 'id',
       }
     },
+  }, {
+    freezeTableName: true // This disables table name changes.
   });
 
   Media.associate = function(models) {

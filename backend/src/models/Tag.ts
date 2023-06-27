@@ -1,5 +1,4 @@
 module.exports = (sequelize, Sequelize) => {
-
   const Tag = sequelize.define('Tag', {
     id: {
       type: Sequelize.INTEGER,
@@ -11,6 +10,8 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING,
       allowNull: false,
     },
+  }, {
+    freezeTableName: true // This disables table name changes.
   });
 
   Tag.associate = function(models) {

@@ -6,3 +6,4 @@ const sequelize = new sequelize_1.Sequelize('database', 'username', 'password', 
     dialect: 'mysql',
 });
 exports.default = sequelize;
+//# sourceMappingURL=database.js.map

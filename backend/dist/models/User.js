@@ -24,3 +24,4 @@ module.exports = (sequelize, DataTypes) => {
     });
     return User;
 };
+//# sourceMappingURL=User.js.map
