@@ -1,5 +1,7 @@
 const request = require('supertest');
-const app = require('../dist/server.js');
+console.log("Before requiring server.ts");
+const server = require('../server');
+console.log("After requiring server.ts");
 const fs = require('fs');
 const path = require('path');
 const uuidv4 = require('uuid').v4; // Ensure you've required it at the top of the file

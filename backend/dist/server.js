@@ -20,8 +20,61 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
 const Media = require('./models/Media')(sequelize, Sequelize);
 const Tag = require('./models/Tag')(sequelize, Sequelize);
 const app = express();
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.get("/", (req, res) => {
+    res.send("Hello from the server!");
+});
+if (!fs.existsSync(path.join(__dirname, 'uploads'))) {
+    console.error("Uploads directory doesn't exist");
+}
+else {
+    console.log("Uploads directory exists");
+}
+app.get('/api/uploads', async (req, res) => {
+    try {
+        const fileNames = await readdir(path.join(__dirname, 'uploads'));
+        const files = await Promise.all(fileNames.map(async (fileName) => {
+            const filePath = path.join(__dirname, 'uploads', fileName);
+            let stats;
+            try {
+                stats = await stat(filePath);
+            }
+            catch (err) {
+                console.error(`Error getting stats for file: ${fileName}`, err);
+                throw err;
+            }
+            let mediaItem;
+            try {
+                mediaItem = await Media.findOne({
+                    where: { url: `uploads/${fileName}` },
+                    include: [Tag]
+                });
+            }
+            catch (err) {
+                console.error(`Error fetching media item for file: ${fileName}`, err);
+                throw err;
+            }
+            if (!mediaItem) {
+                console.error(`No Media item found for file: ${fileName}`);
+                return null;
+            }
+            return {
+                name: fileName,
+                size: stats.size,
+                type: path.extname(fileName),
+                createdAt: mediaItem.createdAt,
+                tags: mediaItem.Tags.map(tag => tag.name)
+            };
+        }));
+        const filteredFiles = files.filter(file => file !== null);
+        res.json(filteredFiles);
+    }
+    catch (error) {
+        console.error("Error getting file list:", error);
+        res.status(500).send('Error getting file list');
+    }
+});
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(express.json());
 app.use(morgan("dev"));
 const storage = multer.diskStorage({
@@ -53,36 +106,6 @@ app.post('/upload', upload.single('file'), async (req, res) => {
     catch (error) {
         console.error('Error while saving to database:', error);
         res.status(500).send('Error while saving to database');
-    }
-});
-app.get('/api/uploads', async (req, res) => {
-    try {
-        const fileNames = await readdir(path.join(__dirname, 'uploads'));
-        const files = await Promise.all(fileNames.map(async (fileName) => {
-            const filePath = path.join(__dirname, 'uploads', fileName);
-            const stats = await stat(filePath);
-            const mediaItem = await Media.findOne({
-                where: { url: `uploads/${fileName}` },
-                include: [Tag]
-            });
-            if (!mediaItem) {
-                console.error(`No Media item found for file: ${fileName}`);
-                return null;
-            }
-            return {
-                name: fileName,
-                size: stats.size,
-                type: path.extname(fileName),
-                createdAt: mediaItem.createdAt,
-                tags: mediaItem.Tags.map(tag => tag.name)
-            };
-        }));
-        const filteredFiles = files.filter(file => file !== null);
-        res.json(filteredFiles);
-    }
-    catch (error) {
-        console.error("Error getting file list:", error);
-        res.status(500).send('Error getting file list');
     }
 });
 app.delete("/api/uploads/:id", async (req, res) => {
