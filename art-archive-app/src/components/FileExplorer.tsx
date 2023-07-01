@@ -12,7 +12,7 @@ export default function FileExplorer({ files, handleFileDelete }: FileExplorerPr
 
   const handleFileSelect = async (file: MyFile) => {
     setSelectedFile(file);
-    const response = await fetch(`http://localhost:3000/files/${file.id}`);
+    const response = await fetch(`http://localhost:3001/api/uploads/${file.id}`);
     const blob = await response.blob();
     setSelectedFileBlob(blob);
   };

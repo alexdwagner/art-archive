@@ -1,11 +1,12 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import ErrorBoundary from '../src/components/ErrorBoundary'; 
-import Header from '../src/components/Header'; 
-import Footer from '../src/components/Footer'; 
-import FileExplorer from '../src/components/FileExplorer';
-import FileUploadForm from '../src/components/FileUploadForm';
-import SearchBar from '../src/components/SearchBar';
-import { MyFile, Tag } from '../src/components/types';
+import ReactDOM from 'react-dom';
+import ErrorBoundary from './components/ErrorBoundary'; 
+import Header from './components/Header'; 
+import Footer from './components/Footer'; 
+import FileExplorer from './components/FileExplorer';
+import FileUploadForm from './components/FileUploadForm';
+import SearchBar from './components/SearchBar';
+import { MyFile, Tag } from './components/types';
 
 const App: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -16,8 +17,21 @@ const App: React.FC = () => {
   }, []);
 
   const fetchData = useCallback(async () => {
-    // TODO: Fetch the files from the server and update the state
+    try {
+      const response = await fetch('http://localhost:3001/api/uploads');
+      console.log(response.headers.get('Content-Type')); // should log 'application/json'
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log(data);
+      setFiles(data);
+      console.log('Set files:', data);
+    } catch (error) {
+      console.error('Fetch operation failed: ', error);
+    }
   }, []);
+  
 
   const updateData = fetchData;
 
@@ -39,3 +53,4 @@ const App: React.FC = () => {
 };
 
 export default App;
+

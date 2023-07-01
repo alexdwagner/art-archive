@@ -20,8 +20,16 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
             unique: true
-        },
+        }
+    }, {
+        freezeTableName: true // This disables table name changes.
     });
+    User.associate = function (models) {
+        User.hasMany(models.Media, {
+            foreignKey: 'userId',
+            as: 'medias',
+        });
+    };
     return User;
 };
 //# sourceMappingURL=User.js.map
