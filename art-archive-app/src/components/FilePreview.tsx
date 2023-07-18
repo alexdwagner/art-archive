@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { MyFile } from './types';
+import { MyFile } from '../types';
 import ImagePreview from './ImagePreview';
 import AudioPreview from './AudioPreview';
 
@@ -8,10 +8,12 @@ type Props = {
 }
 
 const FilePreview: FC<Props> = ({ file }) => {
+  // Convert the lastModified string to a number.
+  const lastModified = Number(file.lastModified);
   const fileObject = new File(
     [file.url],
     file.name,
-    { type: file.type, lastModified: file.lastModified }
+    { type: file.type, lastModified }
   );
 
   switch (file.type.split("/")[0]) {

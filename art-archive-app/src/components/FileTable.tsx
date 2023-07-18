@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import TableRow from './TableRow';
-import { MyFile } from './types';
+import { MyFile } from '../types';
 
 type Props = {
   data?: MyFile[];

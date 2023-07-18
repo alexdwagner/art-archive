@@ -2,7 +2,7 @@ import React, { ChangeEvent, SetStateAction, Dispatch, useState } from "react";
 import { formatBytes } from "../utils";
 import Tags from "./Tags";
 import ErrorBoundary from './ErrorBoundary';
-import { MyFile } from './types';
+import { MyFile, Tag } from '../types';
 
 interface TableRowProps {
   file: MyFile;
@@ -37,7 +37,7 @@ const TableRow: React.FC<TableRowProps> = ({
     setNewName(e.target.value);
   };
 
-  const handleTagsUpdate = (fileId: string, data: { tags: string[] }) => {
+  const handleTagsUpdate = (fileId: string, data: { tags: Tag[] }) => {
     onUpdate(Number(fileId), data);
   };
 

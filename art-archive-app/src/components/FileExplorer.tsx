@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MyFile } from './types';
+import { MyFile } from '../types';
 
 type FileExplorerProps = {
   files: MyFile[];
@@ -33,8 +33,8 @@ export default function FileExplorer({ files, handleFileDelete }: FileExplorerPr
           <div>
             Tags:
             {file.tags.map((tag, index) => (
-              <span key={index}>{tag}</span>
-            ))}
+  <span key={index}>{tag.name}</span>
+))}
           </div>
         </div>
       ))}

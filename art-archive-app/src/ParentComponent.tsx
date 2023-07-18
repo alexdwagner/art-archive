@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import FilePreview from './components/FilePreview';
 import axios from 'axios';
-import { MyFile } from './components/types';
+import { MyFile } from './types';
 
 function ParentComponent() {
   const [selectedFile, setSelectedFile] = useState<MyFile | null>(null);
@@ -33,6 +33,7 @@ function ParentComponent() {
               updatedAt: response.data.updatedAt,
               lastModified: response.data.lastModified,
               webkitRelativePath: response.data.webkitRelativePath,
+              user: 1,
             }
             setSelectedFile(myFile);
             console.log('File converted:', response.data);

@@ -2,6 +2,7 @@
   "name": "art-archive-app",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:8000",
   "dependencies": {
     "@babel/preset-react": "^7.22.5",
     "@svgr/plugin-svgo": "^8.0.1",

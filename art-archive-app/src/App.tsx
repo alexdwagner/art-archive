@@ -6,7 +6,7 @@ import Footer from './components/Footer';
 import FileExplorer from './components/FileExplorer';
 import FileUploadForm from './components/FileUploadForm';
 import SearchBar from './components/SearchBar';
-import { MyFile, Tag } from './components/types';
+import { MyFile, Tag } from './types';
 
 const App: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -18,7 +18,7 @@ const App: React.FC = () => {
 
   const fetchData = useCallback(async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/uploads');
+      const response = await fetch('/api/media/');
       console.log(response.headers.get('Content-Type')); // should log 'application/json'
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -53,4 +53,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-

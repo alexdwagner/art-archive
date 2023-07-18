@@ -1,15 +1,23 @@
 import React, { useState, useRef, useEffect, KeyboardEvent, ChangeEvent } from "react";
 import '../styles/Tags.css';
+import { Tag } from '../types';
 
 interface TagsProps {
-  tags?: string[];
+  tags?: Tag[];
   fileId: string; // Modify to match actual type of fileId
-  onUpdate: (fileId: string, tags: { tags: string[] }) => void; // Modify to match actual onUpdate function
+  onUpdate: (fileId: string, data: { tags: Tag[] }) => void; // Modify to match actual onUpdate function
 }
+
+let ID_COUNTER = 0;
+
+const generateUniqueNumber = () => {
+  ID_COUNTER += 1;
+  return ID_COUNTER;
+};
 
 const Tags = ({ tags = [], fileId, onUpdate }: TagsProps) => {
   const [inputValue, setInputValue] = useState("");
-  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [suggestions, setSuggestions] = useState<Tag[]>([]);
   const [isSuggesting, setIsSuggesting] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -25,13 +33,13 @@ const Tags = ({ tags = [], fileId, onUpdate }: TagsProps) => {
 
   const handleInputChange = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      handleAddTag(e.currentTarget.value);
+      handleAddTag({ id: generateUniqueNumber(), name: e.currentTarget.value }); // replace generateUniqueNumber() with a function that generates a unique ID
       return;
     }
 
     if (e.currentTarget.value && tags) {
       const matchingSuggestions = tags.filter((tag) =>
-        tag.toLowerCase().startsWith(e.currentTarget.value.toLowerCase())
+        tag.name.toLowerCase().startsWith(e.currentTarget.value.toLowerCase())
       );
       setSuggestions(matchingSuggestions);
     } else {
@@ -39,7 +47,7 @@ const Tags = ({ tags = [], fileId, onUpdate }: TagsProps) => {
     }
   };
 
-  const handleAddTag = (newTag: string) => {
+  const handleAddTag = (newTag: Tag) => {
     setInputValue("");
     setSuggestions([]);
     setIsSuggesting(false);
@@ -47,12 +55,12 @@ const Tags = ({ tags = [], fileId, onUpdate }: TagsProps) => {
     onUpdate(fileId, { tags: newTags });
   };
 
-  const handleSuggestionClick = (suggestedTag: string) => {
+  const handleSuggestionClick = (suggestedTag: Tag) => {
     handleAddTag(suggestedTag);
   };
 
-  const handleRemoveTag = (tagToRemove: string) => {
-    const newTags = tags.filter((tag) => tag !== tagToRemove);
+  const handleRemoveTag = (tagToRemove: Tag) => {
+    const newTags = tags.filter((tag) => tag.id !== tagToRemove.id);
     onUpdate(fileId, { tags: newTags });
   };
 
@@ -60,7 +68,7 @@ const Tags = ({ tags = [], fileId, onUpdate }: TagsProps) => {
     <div className="tags">
       {tags.map((tag, index) => (
         <div key={`tag-${index}`} className="tag">
-          <span className="tag-name">{tag}</span>
+          <span className="tag-name">{tag.name}</span>
           <span
             className="remove-tag"
             onClick={() => handleRemoveTag(tag)}
@@ -89,7 +97,7 @@ const Tags = ({ tags = [], fileId, onUpdate }: TagsProps) => {
               className="suggestion"
               onClick={() => handleSuggestionClick(suggestion)}
             >
-              {suggestion}
+              {suggestion.name}
             </div>
           ))}
         </div>

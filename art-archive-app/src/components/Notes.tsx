@@ -1,6 +1,6 @@
 import React, { useState, useEffect, FormEvent } from "react";
 import "../styles/Notes.css";
-import { MyFile } from './types';
+import { MyFile } from '../types';
 
 interface Note {
   noteText: string;

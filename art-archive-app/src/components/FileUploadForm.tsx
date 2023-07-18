@@ -27,7 +27,7 @@ const FileUploadForm: React.FC<Props> = ({ updateData }) => {
     formData.append('userId', '1'); // Adjust this according to your needs
 
     try {
-      const response = await axios.post('http://localhost:3001/upload', formData);
+      const response = await axios.post('http://localhost:8000/api/media/', formData);
 
       if (response.status === 200) {
         console.log('File upload success:', response);
