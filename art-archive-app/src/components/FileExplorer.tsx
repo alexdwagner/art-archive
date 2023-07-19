@@ -12,29 +12,30 @@ export default function FileExplorer({ files, handleFileDelete }: FileExplorerPr
 
   const handleFileSelect = async (file: MyFile) => {
     setSelectedFile(file);
-    const response = await fetch(`http://localhost:3001/api/uploads/${file.id}`);
+    const response = await fetch(`http://localhost:8000/api/uploads/${file.id}`);
     const blob = await response.blob();
     setSelectedFileBlob(blob);
   };
 
+  // If files is undefined, render a loading message
+  if (!files) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div>
-      {files.map((file) => (
+      {(files || []).map((file) => (
         <div key={file.id}>
           <div>
             <span>{file.name}</span>
-            <button onClick={() => handleFileSelect(file)}>
-              Open
-            </button>
-            <button onClick={() => handleFileDelete(file.id)}>
-              Delete
-            </button>
+            <button onClick={() => handleFileSelect(file)}>Open</button>
+            <button onClick={() => handleFileDelete(file.id)}>Delete</button>
           </div>
           <div>
             Tags:
-            {file.tags.map((tag, index) => (
-  <span key={index}>{tag.name}</span>
-))}
+            {(file.tags || []).map((tag, index) => (
+              <span key={index}>{tag.name}</span>
+            ))}
           </div>
         </div>
       ))}
