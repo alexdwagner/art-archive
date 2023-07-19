@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { MyFile } from '../types';
+import axios from 'axios'; // import axios
 
 type FileExplorerProps = {
   files: MyFile[];
@@ -12,10 +13,19 @@ export default function FileExplorer({ files, handleFileDelete }: FileExplorerPr
 
   const handleFileSelect = async (file: MyFile) => {
     setSelectedFile(file);
-    const response = await fetch(`http://localhost:8000/api/uploads/${file.id}`);
-    const blob = await response.blob();
-    setSelectedFileBlob(blob);
-  };
+    
+    try {
+      const response = await axios.get(`http://localhost:8000/api/media/uploads/${file.id}/`); // use axios.get
+      const blob = new Blob([response.data], { type: response.headers['content-type'] }); // create blob from axios response
+      setSelectedFileBlob(blob);
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error('Fetch error: ', error.message);
+      } else {
+        console.error('Fetch error: ', error);
+      }
+    }
+  };  
 
   // If files is undefined, render a loading message
   if (!files) {

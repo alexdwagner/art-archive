@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import ReactDOM from 'react-dom';
 import ErrorBoundary from './components/ErrorBoundary'; 
 import Header from './components/Header'; 
 import Footer from './components/Footer'; 
@@ -7,6 +6,7 @@ import FileExplorer from './components/FileExplorer';
 import FileUploadForm from './components/FileUploadForm';
 import SearchBar from './components/SearchBar';
 import { MyFile, Tag } from './types';
+import axios from 'axios'; // import axios
 
 const App: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -18,12 +18,8 @@ const App: React.FC = () => {
 
   const fetchData = useCallback(async () => {
     try {
-      const response = await fetch('/api/media/');
-      console.log(response.headers.get('Content-Type')); // should log 'application/json'
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
+      const response = await axios.get('http://localhost:8000/api/media/'); // use axios.get
+      const data = response.data; // get data from axios response
       console.log(data);
       setFiles(data);
       console.log('Set files:', data);
