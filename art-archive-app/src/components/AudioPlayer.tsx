@@ -7,6 +7,7 @@ interface AudioPlayerProps {
 
 const AudioPlayer: FunctionComponent<AudioPlayerProps> = ({ src, onPlay }) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  console.log(src)
 
   useEffect(() => {
     console.log('Audio src updated:', src);

@@ -39,7 +39,7 @@ const FileUploadForm: React.FC<Props> = ({ updateData }) => {
     try {
       const response = await axios.post('http://localhost:8000/api/media/', formData);
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         console.log('File upload success:', response);
         setSelectedFile(null);
         updateData();
